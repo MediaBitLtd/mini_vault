@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "lib": ["ESNext", "DOM"],
+        "include": [
+            "./resources/js/**/*.ts",
+            "./resources/js/**/*.d.ts",
+            "./resources/js/**/*.tsx",
+            "./resources/js/**/*.vue"
+        ],
+        "paths": {
+            "~/*": ["./resources/js/*"]
+        },
+        "types": ["vite/client", "jsdom"]
+    },
+}
