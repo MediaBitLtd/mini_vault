@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Laravel\Passport\Client;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Joao Matos',
+            'email' => 'joao.matos@media-bit.co.uk',
+        ]);
+
+        Client::factory()->create([
+            'id' => 1,
+            'name' => 'Mini Vault',
+            'secret' => '4yPJCzknzdoUs3iHSL4DLwSTSziwFWA6SXKrYghd',
+            'redirect' => 'https://vault.home.cloud/auth/callback',
+            'personal_access_client' => 0,
+            'password_client' => 0,
+            'revoked' => 0,
         ]);
     }
 }
