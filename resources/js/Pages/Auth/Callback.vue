@@ -5,12 +5,15 @@
 import CookieJS from 'js-cookie'
 import axios from 'axios'
 import { usePage } from '@inertiajs/vue3'
+import AuthLayout from '~/Layouts/AuthLayout.vue'
 
 const props = defineProps<{
     code: string;
 }>()
 
 const page = usePage()
+
+defineOptions({ layout: AuthLayout })
 
 axios.post('/oauth/token', {
     grant_type: 'authorization_code',
@@ -35,5 +38,4 @@ axios.post('/oauth/token', {
 
         window.location.href = '/auth/logout'
     })
-
 </script>

@@ -2,7 +2,6 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: 'class',
     content: [
         './resources/**/*.js',
         './resources/**/*.vue',
