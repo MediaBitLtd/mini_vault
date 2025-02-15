@@ -26,7 +26,7 @@ axios.post('/oauth/token', {
         window.location.href = '/'
     })
     .catch(error => {
-        if (page.props.isLocal) {
+        if (page.props.app.isLocal) {
             alert('Error')
             return
         }
