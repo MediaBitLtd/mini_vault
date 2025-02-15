@@ -10,6 +10,9 @@
         "paths": {
             "~/*": ["./resources/js/*"]
         },
-        "types": ["vite/client", "jsdom"]
+        "module": "es2022",
+        "moduleResolution": "Node",
+        "types": ["vite/client", "jsdom"],
+        "allowSyntheticDefaultImports": true
     },
 }

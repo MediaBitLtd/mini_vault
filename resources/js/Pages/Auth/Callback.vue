@@ -4,10 +4,13 @@
 <script setup lang="ts">
 import CookieJS from 'js-cookie'
 import axios from 'axios'
+import { usePage } from '@inertiajs/vue3'
 
 const props = defineProps<{
     code: string;
 }>()
+
+const page = usePage()
 
 axios.post('/oauth/token', {
     grant_type: 'authorization_code',
@@ -17,13 +20,18 @@ axios.post('/oauth/token', {
     code: props.code,
 })
     .then(({ data }) => {
-        const accessToken = data.accessToken;
-        CookieJS.set('_accessToken', accessToken); // Session cookie
-        axios.defaults.headers.Authorization = `Bearer ${accessToken}`;
-        window.location.href = '/';
+        const accessToken = data.accessToken
+        CookieJS.set('_accessToken', accessToken) // Session cookie
+        axios.defaults.headers.Authorization = `Bearer ${ accessToken }`
+        window.location.href = '/'
     })
     .catch(error => {
-        window.location.href = '/auth/logout';
+        if (page.props.isLocal) {
+            alert('Error')
+            return
+        }
+
+        window.location.href = '/auth/logout'
     })
 
 </script>

@@ -6,6 +6,7 @@ import axios from 'axios'
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 createInertiaApp({
+    // @ts-ignore // this comes from inertiajs lol
     resolve: name => {
         // @ts-ignore
         const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
