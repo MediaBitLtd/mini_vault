@@ -20,12 +20,14 @@ axios.post('/oauth/token', {
     code: props.code,
 })
     .then(({ data }) => {
-        const accessToken = data.accessToken
+        const accessToken = data.access_token
         CookieJS.set('_accessToken', accessToken) // Session cookie
         axios.defaults.headers.Authorization = `Bearer ${ accessToken }`
         window.location.href = '/'
     })
     .catch(error => {
+        CookieJS.remove('_accessToken')
+
         if (page.props.app.isLocal) {
             alert('Error')
             return

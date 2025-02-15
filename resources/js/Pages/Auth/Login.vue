@@ -95,10 +95,13 @@
 import AuthLayout from '~/Layouts/AuthLayout.vue'
 import { usePage } from '@inertiajs/vue3'
 import { computed } from 'vue';
+import CookieJS from 'js-cookie'
 
 const page = usePage()
 
 const csrf = computed(() => page.props.csrf_token)
+
+CookieJS.remove('_accessToken')
 
 defineOptions({ layout: AuthLayout })
 </script>

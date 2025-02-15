@@ -7,6 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -16,6 +18,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property Carbon|null $email_verified_at
  * @property string $password
+ * @property string $key
  * @property string $timezone
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -36,13 +39,25 @@ class User extends Authenticatable
 
     protected $hidden = [
         'password',
+        'key',
     ];
 
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'key' => 'hashed',
+    ];
+
+    protected static function boot()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        parent::boot();
+        static::creating(function (self $user) {
+            $user->key = Hash::make(Str::random(40));
+        });
+    }
+
+    public function getPKey(string $password): string
+    {
+        return hash('sha256', "$password:$this->key");
     }
 }

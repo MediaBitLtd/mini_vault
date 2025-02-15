@@ -24,9 +24,10 @@ class DatabaseSeeder extends Seeder
             'name' => 'Mini Vault',
             'secret' => '4yPJCzknzdoUs3iHSL4DLwSTSziwFWA6SXKrYghd',
             'redirect' => 'https://vault.home.cloud/auth/callback',
-            'personal_access_client' => 0,
-            'password_client' => 0,
-            'revoked' => 0,
+            'personal_access_client' => false,
+            'password_client' => false,
+            'revoked' => false,
+            'requires_user_key' => true,
         ]);
     }
 }

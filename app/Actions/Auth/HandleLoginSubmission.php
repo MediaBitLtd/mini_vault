@@ -2,8 +2,10 @@
 
 namespace App\Actions\Auth;
 
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -22,7 +24,12 @@ class HandleLoginSubmission
     public function handle(ActionRequest $request): RedirectResponse
     {
         if (Auth::attempt($request->validated())) {
-            return redirect()->intended('dashboard');
+            /** @var User $user */
+            $user = Auth::user();
+
+            Cache::put('oauth.pkey',  $user->getPKey($request->get('password')));
+
+            return redirect()->intended('');
         }
 
         return back()->withErrors([
