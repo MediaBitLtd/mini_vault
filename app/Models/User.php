@@ -4,11 +4,14 @@ namespace App\Models;
 
 //use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -22,9 +25,12 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $timezone
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
+ * @property Vault[]|Collection<Vault> $vaults
  */
 class User extends Authenticatable
 {
+    use HasApiTokens;
     use HasFactory;
     use Notifiable;
     use HasRoles;
@@ -56,8 +62,17 @@ class User extends Authenticatable
         });
     }
 
+    // Methods
+
     public function getPKey(string $password): string
     {
         return hash('sha256', "$password:$this->key");
+    }
+
+    // Relationships
+
+    public function vaults(): HasMany
+    {
+        return $this->hasMany(Vault::class);
     }
 }
