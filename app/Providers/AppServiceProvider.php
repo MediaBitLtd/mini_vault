@@ -2,14 +2,17 @@
 
 namespace App\Providers;
 
+use App\OAuth\AccessTokenRepository;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Bridge\AccessTokenRepository as PassportAccessTokenRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        App::bind(PassportAccessTokenRepository::class, AccessTokenRepository::class);
     }
 
     public function boot(): void

@@ -6,6 +6,9 @@ export type PageProps<
     auth: {
         user: UserResource;
     };
-    isLocal: boolean;
+    app: {
+        isLocal: boolean;
+        version: string;
+    }
     csrf_token: string;
 };

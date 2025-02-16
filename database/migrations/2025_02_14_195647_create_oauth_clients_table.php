@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->boolean('personal_access_client');
             $table->boolean('password_client');
             $table->boolean('revoked');
+            $table->boolean('requires_user_key')->default(false);
             $table->timestamps();
         });
     }
