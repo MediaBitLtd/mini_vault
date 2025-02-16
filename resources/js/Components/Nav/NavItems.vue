@@ -16,10 +16,11 @@
         </section>
         <section>
             <h3 class="text-xl text-bolder text-gray-400 dark:text-sot-500">My Vaults</h3>
+            <Loader v-if="loadingVaults" />
             <ul class="flex flex-col">
-                <li>
-                    <Link href="/">
-                        Each Vault
+                <li v-for="vault in vaults">
+                    <Link :href="`/vault/${vault.id}`">
+                        {{ vault.name }}
                     </Link>
                 </li>
             </ul>
@@ -33,4 +34,8 @@
 </template>
 <script setup>
 import { Link } from '@inertiajs/vue3'
+import { useVaults } from '~/Composables/vaults.js'
+import Loader from '~/Components/Loader.vue'
+
+const { loadingVaults, vaults } = useVaults()
 </script>

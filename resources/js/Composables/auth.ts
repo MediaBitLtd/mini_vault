@@ -14,6 +14,7 @@ export const useAuth = () => {
     }
 
     axios.defaults.headers.Authorization = `Bearer ${ accessToken }`
+    axios.defaults.baseURL = '/api'
 
     user.value = page.props.auth.user
 

@@ -1,6 +1,6 @@
-export type DDate = `${number}-${number}-${number}`;
-export type DTime = `${number}:${number}` | `${number}:${number}:${number}`;
-export type DateTime = `${DDate} ${DTime}`;
+export type DDate = `${ number }-${ number }-${ number }`;
+export type DTime = `${ number }:${ number }` | `${ number }:${ number }:${ number }`;
+export type DateTime = `${ DDate } ${ DTime }`;
 
 export interface CollectionMetaResource {
     page: number;
@@ -38,4 +38,9 @@ export interface UserResource extends ModelResource {
 
     role?: string;
     verified?: boolean;
+}
+
+export interface VaultResource extends ModelResource {
+    name: string;
+    is_unlocked: boolean;
 }
