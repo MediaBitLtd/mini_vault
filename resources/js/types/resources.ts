@@ -42,5 +42,5 @@ export interface UserResource extends ModelResource {
 
 export interface VaultResource extends ModelResource {
     name: string;
-    is_unlocked: boolean;
+    is_unlockable: boolean;
 }

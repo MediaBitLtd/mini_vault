@@ -26,7 +26,7 @@ axios.post('/oauth/token', {
         const accessToken = data.access_token
         CookieJS.set('_accessToken', accessToken) // Session cookie
         axios.defaults.headers.Authorization = `Bearer ${ accessToken }`
-        window.location.href = '/'
+        window.location.replace('/');
     })
     .catch(error => {
         CookieJS.remove('_accessToken')
@@ -36,6 +36,6 @@ axios.post('/oauth/token', {
             return
         }
 
-        window.location.href = '/auth/logout'
+        window.location.replace('/auth/logout')
     })
 </script>

@@ -14,7 +14,7 @@ class VaultResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'is_unlocked' => $this->isUnlocked,
+            'is_unlockable' => $this->isUnlockable,
             'created_at' => datetime($this->created_at),
             'updated_at' => datetime($this->updated_at),
         ];
