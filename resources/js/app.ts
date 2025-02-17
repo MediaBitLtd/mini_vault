@@ -1,18 +1,22 @@
 import { createApp, h } from 'vue'
-import type { DefineComponent } from 'vue';
+import type { DefineComponent } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import axios from 'axios'
 import GeneralLayout from '~/Layouts/GeneralLayout.vue'
 import { useDarkMode } from '~/Composables/settings'
+import PrimeVue from 'primevue/config'
+import ConfirmationService from 'primevue/confirmationservice'
+import Preset from '~/theme'
+import 'primeicons/primeicons.css'
 
-useDarkMode();
+useDarkMode()
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
 
 createInertiaApp({
     resolve: name => {
         const pages = import.meta.glob<DefineComponent>('./Pages/**/*.vue', { eager: true })
-        const page = pages[`./Pages/${name}.vue`]
+        const page = pages[`./Pages/${ name }.vue`]
 
         page.default.layout = page.default.layout || GeneralLayout
 
@@ -21,6 +25,16 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(ConfirmationService)
+            .use(PrimeVue, {
+                ripple: true,
+                theme: {
+                    preset: Preset,
+                    options: {
+                        darkModeSelector: '.dark'
+                    },
+                },
+            })
             .mount(el)
     },
 })

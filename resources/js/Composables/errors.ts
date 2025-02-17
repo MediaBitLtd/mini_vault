@@ -43,6 +43,8 @@ export function useErrorHandler() {
                     ) + ' not found'
                 }
                 return response.data.message || 'Not found'
+            case 422:
+                return response.data.message
             case 423:
                 return 'Company subscription is expired. Please contact your administrator.'
             case 429:

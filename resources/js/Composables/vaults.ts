@@ -31,6 +31,7 @@ export const useVaults = () => {
 
     return {
         loadingVaults,
+        loadVaults,
         vaults,
     }
 }

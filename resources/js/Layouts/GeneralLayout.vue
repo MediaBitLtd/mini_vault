@@ -2,7 +2,7 @@
     <section class="flex flex-col w-full h-[100dvh]">
         <header
             class="sm:hidden absolute z-30 h-full w-full shadow bg-gray-200 overflow-y-hidden dark:text-white dark:bg-stone-950"
-            style="transition: all 100ms ease"
+            style="transition: all 300ms ease"
             :style="{ 'max-height': menuOpened ? '100%' : '4rem'}"
         >
             <div class="flex items-center w-full mt-3">
@@ -71,15 +71,17 @@
             </article>
         </main>
     </section>
+    <ConfirmDialog></ConfirmDialog>
 </template>
 <script setup lang="ts">
 import { useAuth } from '~/Composables/auth'
-import { Link, usePage } from '@inertiajs/vue3'
+import { Link, router, usePage } from '@inertiajs/vue3'
 import HamburgerMenuButton from '~/Components/HamburgerMenuButton.vue'
 import { computed, ref } from 'vue'
 import ToggleSwitch from '~/Components/ToggleSwitch.vue'
 import { useDarkMode } from '~/Composables/settings'
 import NavItems from '~/Components/Nav/NavItems.vue'
+import { ConfirmDialog } from 'primevue'
 
 const page = usePage()
 const { darkMode } = useDarkMode()
@@ -88,4 +90,8 @@ const { user } = useAuth()
 const menuOpened = ref(false)
 
 const version = computed(() => page.props.app.version)
+
+router.on('start', () => {
+    menuOpened.value = false
+})
 </script>

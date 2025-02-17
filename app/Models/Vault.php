@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Exceptions\InvalidVaultSignatureException;
 use App\Exceptions\VaultAlreadySigned;
 use Carbon\Carbon;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +24,7 @@ use Illuminate\Support\Str;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property bool $isUnlocked
+ * @property bool $isUnlockable
  */
 class Vault extends Model
 {
@@ -51,7 +52,7 @@ class Vault extends Model
 
     public function getEncrypter(): Encrypter
     {
-        return new Encrypter($this->getVKey(), Config::get('app.cipher'));;
+        return new Encrypter($this->getVKey(), Config::get('app.cipher'));
     }
 
     public function getVKey(): string
@@ -69,7 +70,11 @@ class Vault extends Model
             throw new VaultAlreadySigned;
         }
 
-        $this->signature = $this->getEncrypter()->encrypt($this->key);
+        $this->signature = $this->getEncrypter()->encrypt([
+            'id' => $this->id,
+            'key' => $this->key,
+            'uid' => $this->user_id,
+        ]);
     }
 
     /**
@@ -81,7 +86,15 @@ class Vault extends Model
             throw new InvalidVaultSignatureException;
         }
 
-        return $this->key === $this->getEncrypter()->decrypt($this->signature);
+        try {
+            $obj = $this->getEncrypter()->decrypt($this->signature);
+        } catch (DecryptException) {
+            return false;
+        }
+
+        return $this->key === $obj['key'] ?? null &&
+            $this->id === $obj['id'] ?? null &&
+            $this->user_id = $obj['uid'] ?? null;
     }
 
     // Relationships
@@ -91,7 +104,7 @@ class Vault extends Model
     }
 
     // Attributes
-    public function isUnlocked(): Attribute
+    public function isUnlockable(): Attribute
     {
         return Attribute::make(
             get: function () {

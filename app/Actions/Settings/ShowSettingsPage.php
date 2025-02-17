@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Actions\Dashboard;
+namespace App\Actions\Settings;
 
 use Inertia\Inertia;
 use Inertia\Response;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class ShowDashboard
+class ShowSettingsPage
 {
     use AsAction;
 
     public function handle(): Response
     {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Settings');
     }
 }

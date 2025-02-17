@@ -30,5 +30,16 @@ class DatabaseSeeder extends Seeder
             'revoked' => false,
             'requires_user_key' => true,
         ]);
+
+        Client::factory()->create([
+            'id' => 2,
+            'name' => 'Mini Vault NPKey',
+            'secret' => '8tLejTaJdWPKMMIDTvfTfLlFyPmCOdOsipXFAw3t',
+            'redirect' => 'https://vault.home.cloud/auth/callback',
+            'personal_access_client' => false,
+            'password_client' => false,
+            'revoked' => false,
+            'requires_user_key' => false,
+        ]);
     }
 }
