@@ -6,16 +6,16 @@
 .loader {
     min-width: 22px;
     min-height: 22px;
-    border: 4px solid #0f172b;
-    border-bottom-color: #ff3d00;
+    border: 3px solid #0f172b;
+    border-bottom-color: #ff4405;
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
 }
 .dark .loader {
-    border: 4px solid #ffffff;
-    border-bottom-color: #ff3d00;
+    border: 3px solid #ffffff;
+    border-bottom-color: #ff4405;
 }
 
 @keyframes rotation {

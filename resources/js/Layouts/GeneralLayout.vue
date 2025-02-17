@@ -71,6 +71,7 @@
             </article>
         </main>
     </section>
+    <ConfirmDialog></ConfirmDialog>
 </template>
 <script setup lang="ts">
 import { useAuth } from '~/Composables/auth'
@@ -80,6 +81,7 @@ import { computed, ref } from 'vue'
 import ToggleSwitch from '~/Components/ToggleSwitch.vue'
 import { useDarkMode } from '~/Composables/settings'
 import NavItems from '~/Components/Nav/NavItems.vue'
+import { ConfirmDialog } from 'primevue'
 
 const page = usePage()
 const { darkMode } = useDarkMode()

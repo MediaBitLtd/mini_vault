@@ -1,6 +1,7 @@
 <?php
 
 use App\Actions\Vaults\CreateVault;
+use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\GetVaults;
 use App\Actions\Vaults\ShowVault;
 use App\Http\Middleware\AssertPKeyMiddleware;
@@ -11,5 +12,6 @@ Route::middleware('auth:api')->group(function () {
         Route::get('vaults', GetVaults::class)->name('vaults.index');
         Route::post('vaults', CreateVault::class)->name('vaults.store');
         Route::get('vaults/{vault}', ShowVault::class)->name('vaults.show');
+        Route::delete('vaults/{vault}', DeleteVault::class);
     });
 });

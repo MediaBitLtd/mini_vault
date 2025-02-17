@@ -27,34 +27,37 @@
                 </li>
                 <li class="mt-2">
                     <button
-                        v-if="!addingVault"
+                        v-if="newVaultName === undefined"
                         role="button"
                         type="button"
                         class="p-1 text-gray-600 cursor-pointer"
-                        @click="addingVault = true"
+                        @click="prepareForm"
                     >+ Add New Vault
                     </button>
                     <template v-else>
-                        <div class="flex items-center gap-2">
-                            <input
-                                autofocus
+                        <div class="flex items-center gap-3">
+                            <!--Autofocus doesn't seem to work all the time-->
+                            <InputText
+                                ref="nameInput"
+                                size="small"
                                 v-model="newVaultName"
-                                type="text"
-                                class="border rounded-lg p-1"
+                                :invalid="!!error"
                                 placeholder="Name of vault"
                                 @keydown.enter.prevent="createVault"
+                                @focusout="() => !newVaultName?.trim().length ? (newVaultName = undefined) : null"
                             />
                             <button
                                 v-if="!savingNew"
                                 role="button"
                                 type="button"
-                                class="cursor-pointer"
+                                class="flex"
                                 @click="createVault"
-                            >✔
+                            >
+                                <i class="pi pi-check text-green-700 dark:text-gray-400"></i>
                             </button>
                             <SpinnerLoader v-else />
                         </div>
-                        <span class="text-xs text-red-600 block mt-1" v-if="error">{{ error }}</span>
+                        <Message v-if="error" severity="error" size="small" variant="simple">{{ error }}</Message>
                     </template>
                 </li>
             </ul>
@@ -67,22 +70,30 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3'
+import { Link, router } from '@inertiajs/vue3'
 import { useVaults } from '~/Composables/vaults.js'
 import Loader from '~/Components/Loader.vue'
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import SpinnerLoader from '~/Composables/SpinnerLoader.vue'
 import axios from 'axios'
 import { useErrorHandler } from '~/Composables/errors.js'
 import { VaultResource } from '~/types/resources'
+import { Message, InputText } from 'primevue'
 
 const { handleAPIError } = useErrorHandler()
 const { loadingVaults, vaults } = useVaults()
 
-const addingVault = ref(false)
+const nameInput = ref()
 const savingNew = ref(false)
-const newVaultName = ref('')
+const newVaultName = ref<string | undefined>(undefined)
 const error = ref<string | undefined>(undefined)
+
+const prepareForm = async () => {
+    newVaultName.value = ''
+    await nextTick()
+
+    nameInput.value?.$el.focus()
+}
 
 const createVault = async () => {
     savingNew.value = true
@@ -92,8 +103,8 @@ const createVault = async () => {
             name: newVaultName.value,
         })
         vaults.value.push(data)
-        addingVault.value = false
-        newVaultName.value = ''
+        newVaultName.value = undefined
+        router.get(`/vault/${data.id}`)
     } catch (e) {
         const { errorMessage } = handleAPIError(e)
         if (errorMessage) {
