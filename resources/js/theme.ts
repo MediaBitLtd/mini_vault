@@ -38,6 +38,15 @@ export default definePreset(Aura, {
         },
     },
     components: {
+        floatlabel: {
+            colorScheme: {
+                light: {
+                    focus: {
+                        color: '{neutral.700}',
+                    },
+                },
+            },
+        },
         inputtext: {
             colorScheme: {
                 light: {
