@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property int $id
@@ -28,8 +28,8 @@ class Category extends Model
     ];
 
     // Relationships
-    public function fields(): HasMany
+    public function fields(): BelongsToMany
     {
-        return $this->hasMany(Field::class);
+        return $this->belongsToMany(Field::class, 'category_field');
     }
 }

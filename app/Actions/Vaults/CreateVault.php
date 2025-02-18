@@ -2,7 +2,7 @@
 
 namespace App\Actions\Vaults;
 
-use App\Exceptions\VaultAlreadySigned;
+use App\Exceptions\VaultAlreadySignedException;
 use App\Http\Resources\Vaults\VaultResource;
 use App\Models\User;
 use App\Models\Vault;
@@ -26,7 +26,7 @@ class CreateVault
     }
 
     /**
-     * @throws VaultAlreadySigned
+     * @throws VaultAlreadySignedException
      */
     public function handle(ActionRequest $request): Vault
     {
