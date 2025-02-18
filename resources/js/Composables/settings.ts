@@ -8,9 +8,9 @@ const setDarkMode = () => {
     document.documentElement.classList.remove('dark')
     if (darkMode.value) {
         document.documentElement.classList.add('dark')
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#171f2a')
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0c0a09')
     } else {
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#3E56A2')
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#e5e7eb')
     }
 
     if (!settingDarkMode.value && systemDarkMode.value !== darkMode.value) {
