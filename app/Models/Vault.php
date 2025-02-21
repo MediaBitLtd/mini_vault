@@ -54,15 +54,15 @@ class Vault extends Model
 
     // Methods
 
-    public function getEncrypter(): Encrypter
-    {
-        return new Encrypter($this->getVKey(), Config::get('app.cipher'));
-    }
-
     public function getVKey(): string
     {
         $pKey = blink()->get('pkey', '__invalid');
         return hash('md5', "$pKey:$this->key");
+    }
+
+    public function getEncrypter(): Encrypter
+    {
+        return new Encrypter($this->getVKey(), Config::get('app.cipher'));
     }
 
     /**
