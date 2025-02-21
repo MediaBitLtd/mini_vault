@@ -16,23 +16,31 @@ export default definePreset(Aura, {
             900: "#661b02",
             950: "#401101",
         },
-        surface: {
-            50: '{neutral.50}',
-            100: '{neutral.100}',
-            200: '{neutral.200}',
-            300: '{neutral.300}',
-            400: '{neutral.400}',
-            500: '{neutral.500}',
-            600: '{neutral.600}',
-            700: '{neutral.700}',
-            800: '{neutral.800}',
-            900: '{neutral.900}',
-            950: '{neutral.950}',
-        },
         colorScheme: {
+            light: {
+                content: {
+                    background: '{surface.100}',
+                },
+            },
             dark: {
                 primary: {
                     contrastColor: '{surface.100}',
+                },
+                surface: {
+                    50: '{zinc.50}',
+                    100: '{zinc.100}',
+                    200: '{zinc.200}',
+                    300: '{zinc.300}',
+                    400: '{zinc.400}',
+                    500: '{zinc.500}',
+                    600: '{zinc.600}',
+                    700: '{zinc.700}',
+                    800: '{zinc.800}',
+                    900: '{zinc.900}',
+                    950: '{zinc.950}',
+                },
+                content: {
+                    background: '{surface.800}',
                 },
             },
         },

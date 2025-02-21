@@ -37,7 +37,7 @@
                 </nav>
             </div>
         </header>
-        <main class="flex flex-grow bg-white dark:bg-neutral-900 dark:text-white">
+        <main class="flex flex-grow max-h-full overflow-hidden bg-white dark:bg-neutral-900 dark:text-white">
             <aside
                 class="hidden sm:flex min-w-56 lg:min-w-72 bg-gray-200 border-r border-gray-500 dark:text-white dark:bg-stone-950 dark:border-black"
             >
@@ -64,10 +64,8 @@
                     </div>
                 </nav>
             </aside>
-            <article class="flex-grow mt-[4rem] mx-auto sm:mt-0 xl:max-w-4xl">
-                <section class="px-5 pt-10">
-                    <slot />
-                </section>
+            <article class="flex-grow relative h-[100dvh] pt-[4rem] sm:pt-auto sm:mt-[4rem] mx-auto sm:mt-0">
+                <slot />
             </article>
         </main>
     </section>
@@ -95,3 +93,33 @@ router.on('start', () => {
     menuOpened.value = false
 })
 </script>
+<style lang="scss">
+::-webkit-scrollbar {
+    width: .2rem;
+    height: .2rem;
+
+    @media screen and (min-width: 1280px) {
+        width: .4rem;
+        height: .4rem;
+    }
+
+    @media screen and (min-width: 1600px) {
+        width: .7rem;
+        height: .7rem;
+    }
+
+    &-track {
+        background: transparent;
+    }
+    &-thumb {
+        background: #b6b7be;
+        border-radius: 20px;
+    }
+}
+
+.dark {
+    ::-webkit-scrollbar-thumb {
+        background: #4b4d56;
+    }
+}
+</style>

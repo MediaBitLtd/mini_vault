@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use App\Exceptions\InvalidVaultSignatureException;
-use App\Exceptions\VaultAlreadySigned;
+use App\Exceptions\VaultAlreadySignedException;
 use Carbon\Carbon;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Encryption\Encrypter;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +26,9 @@ use Illuminate\Support\Str;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
- * @property bool $isUnlockable
+ * @property VaultRecord[]|Collection<VaultRecord> $records
+ *
+ * @property-read bool $isUnlockable
  */
 class Vault extends Model
 {
@@ -50,24 +54,24 @@ class Vault extends Model
 
     // Methods
 
-    public function getEncrypter(): Encrypter
-    {
-        return new Encrypter($this->getVKey(), Config::get('app.cipher'));
-    }
-
     public function getVKey(): string
     {
         $pKey = blink()->get('pkey', '__invalid');
         return hash('md5', "$pKey:$this->key");
     }
 
+    public function getEncrypter(): Encrypter
+    {
+        return new Encrypter($this->getVKey(), Config::get('app.cipher'));
+    }
+
     /**
-     * @throws VaultAlreadySigned
+     * @throws VaultAlreadySignedException
      */
     public function sign(bool $force = false): void
     {
         if ($this->signature && !$force) {
-            throw new VaultAlreadySigned;
+            throw new VaultAlreadySignedException;
         }
 
         $this->signature = $this->getEncrypter()->encrypt([
@@ -101,6 +105,11 @@ class Vault extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function records(): HasMany
+    {
+        return $this->hasMany(VaultRecord::class);
     }
 
     // Attributes

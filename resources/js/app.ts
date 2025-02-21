@@ -5,6 +5,7 @@ import axios from 'axios'
 import GeneralLayout from '~/Layouts/GeneralLayout.vue'
 import { useDarkMode } from '~/Composables/settings'
 import PrimeVue from 'primevue/config'
+import { Ripple } from 'primevue'
 import ConfirmationService from 'primevue/confirmationservice'
 import Preset from '~/theme'
 import 'primeicons/primeicons.css'
@@ -35,6 +36,7 @@ createInertiaApp({
                     },
                 },
             })
+            .directive('ripple', Ripple)
             .mount(el)
     },
 })

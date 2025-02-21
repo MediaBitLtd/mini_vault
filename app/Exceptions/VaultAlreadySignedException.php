@@ -4,6 +4,6 @@ namespace App\Exceptions;
 
 use Exception;
 
-class VaultAlreadySigned extends Exception
+class VaultAlreadySignedException extends Exception
 {
 }
