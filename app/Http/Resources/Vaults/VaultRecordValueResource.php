@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Vaults;
 
-use App\Http\Resources\Fields\FieldResource;
+use App\Http\Resources\Categories\FieldResource;
 use App\Models\VaultRecordValue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

@@ -40,6 +40,17 @@ export interface UserResource extends ModelResource {
     verified?: boolean;
 }
 
+export interface CategoryResource extends ModelResource {
+    name: string;
+    fields: FieldResource[];
+}
+
+export interface FieldResource extends ModelResource {
+    name: string;
+    label: string;
+    type: string; // TODO change this to enum
+}
+
 export interface VaultResource extends ModelResource {
     name: string;
     is_unlockable: boolean;
@@ -47,4 +58,11 @@ export interface VaultResource extends ModelResource {
 
 export interface VaultRecordResource extends ModelResource {
     name: string;
+    category: CategoryResource;
+}
+
+export interface VaultRecordVaultResource extends ModelResource {
+    value?: string;
+    is_invalid?: boolean;
+    field?: FieldResource;
 }

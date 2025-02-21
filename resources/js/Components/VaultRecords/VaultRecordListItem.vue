@@ -1,22 +1,15 @@
 <template>
-    <Panel ref="panel" class="cursor-pointer" :header="record.name" collapsed @click="open">
-        <p class="mb-10">
-            Fucking awesome aye
-        </p>
-        <div class="flex items-center gap-4 mb-4">
-            <label for="username" class="font-semibold w-24">Username</label>
-            <InputText fluid id="username" class="flex-auto" autocomplete="off" />
-        </div>
-        <div class="flex items-center gap-4 mb-8">
-            <label for="email" class="font-semibold w-24">Email</label>
-            <InputText fluid id="email" class="flex-auto" autocomplete="off" />
+    <Panel ref="panel" class="cursor-pointer" :header="title" collapsed @click="open">
+        <div v-for="recordValue in record.values" class="flex items-center gap-4">
+            <label :for="`record-field-${recordValue.id}`" class="font-semibold w-24">{{ recordValue.field.label }}</label>
+            <InputText fluid :id="`record-field-${recordValue.id}`" class="flex-auto" autocomplete="off" />
         </div>
     </Panel>
 </template>
 <script setup lang="ts">
 import { InputText, Panel } from 'primevue'
 import { VaultRecordResource, VaultResource } from '~/types/resources'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{
     vault: VaultResource,
@@ -25,6 +18,8 @@ const props = defineProps<{
 
 const panel = ref()
 const opened = ref(false);
+
+const title = computed(() => props.record.name || props.record.category.name)
 
 const open = () => {
     if (opened.value) {

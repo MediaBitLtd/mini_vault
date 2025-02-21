@@ -35,7 +35,7 @@ class GetVaultRecords
             ->when($request->has('q'), fn($q) => $q
                 ->where('name', 'like', "%{$request->get('q')}%")
             )
-            ->with('values.field')
+            ->with(['values.field', 'category'])
             ->paginate();
     }
 

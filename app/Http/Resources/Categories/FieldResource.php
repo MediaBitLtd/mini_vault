@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Fields;
+namespace App\Http\Resources\Categories;
 
 use App\Models\Field;
 use Illuminate\Http\Request;
@@ -16,8 +16,6 @@ class FieldResource extends JsonResource
             'slug' => $this->slug,
             'label' => $this->label,
             'type' => $this->type,
-            'created_at' => datetime($this->created_at),
-            'updated_at' => datetime($this->updated_at),
         ];
     }
 }

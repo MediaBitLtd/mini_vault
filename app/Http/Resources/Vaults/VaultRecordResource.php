@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Vaults;
 
+use App\Http\Resources\Categories\CategoryResource;
 use App\Models\VaultRecord;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,6 +17,7 @@ class VaultRecordResource extends JsonResource
             'name' => $this->name,
             'is_favourite' => $this->is_favourite,
 
+            'category' => CategoryResource::make($this->whenLoaded('category')),
             'values' => VaultRecordValueResource::collection($this->whenLoaded('values')),
 
             'created_at' => datetime($this->created_at),
