@@ -26,7 +26,7 @@ class HandleWebauthnLogin
             ->firstOrFail();
 
         $user = $authorization->user;
-        $authData = Cache::get("webauthn.auth:$user->id");
+        $authData = Cache::pull("webauthn.auth:$user->id");
         $expectedChallenge = $authData['challenge'] ?? '__invalid__';
 
         if ($requestData->clientData->challenge !== $expectedChallenge) {

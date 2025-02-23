@@ -35,7 +35,7 @@ class GetBiometricAuthOptions
         Cache::put("webauthn.auth:$user->id", [
             'challenge' => $challenge = Str::random(40),
             'pkey' => $request->get('pKey'),
-        ], 120 * 1000); // TODO remove the 1000
+        ], 120);
 
         return [
             'rpId' => Str::of(Config::get('app.url'))
