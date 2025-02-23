@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('key');
+            $table->string('biometric_key', 64)->nullable();
             $table->string('timezone')->default('Europe/London');
             $table->timestamps();
         });

@@ -15,3 +15,7 @@
     --color-orange-900: #661b02;
     --color-orange-950: #401101;
 }
+
+button {
+    cursor: pointer;
+}

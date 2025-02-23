@@ -53,7 +53,6 @@ class Vault extends Model
     }
 
     // Methods
-
     public function getVKey(): string
     {
         $pKey = blink()->get('pkey', '__invalid');

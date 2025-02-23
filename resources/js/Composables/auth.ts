@@ -1,11 +1,96 @@
 import CookieJS from 'js-cookie'
 import axios from 'axios'
 import { ref } from 'vue'
-import { usePage } from '@inertiajs/vue3'
+import { usePage, router } from '@inertiajs/vue3'
 import { UserResource } from '~/types/resources'
-
+import { useEncryption } from '~/Composables/encryption'
 const page = usePage()
+const { bufferToBase64URLString } = useEncryption()
+
 const user = ref<UserResource | undefined>()
+
+const getGuestAxios = () => {
+    const newInstance = axios.create()
+    delete newInstance.defaults.headers.Authorization
+    newInstance.defaults.baseURL = '/api'
+    return newInstance
+}
+
+const getAuthnAuthConfiguration = async () => {
+    const webauthn = localStorage.getItem('_webauthn')
+
+    if (!webauthn) {
+        return null
+    }
+
+    const { userId, userKey, pKey } = JSON.parse(atob(webauthn))
+
+    try {
+        const { data } = await (getGuestAxios()).post('/webauthn/get-auth-options', {
+            userId,
+            userKey,
+            pKey,
+        })
+
+        return data
+    } catch (e) {
+        localStorage.removeItem('_webauthn')
+        return null
+    }
+}
+
+const attemptAuthWithCredential = async (credential) => {
+    try {
+        const { data } = await getGuestAxios().post('/webauthn/login', {
+            clientExtensionResults: credential.getClientExtensionResults(),
+            id: credential.id,
+            type: credential.type,
+            authenticatorAttachment: credential.authenticatorAttachment,
+            response: {
+                authenticatorData: bufferToBase64URLString(credential.response.authenticatorData),
+                clientDataJSON: bufferToBase64URLString(credential.response.clientDataJSON),
+                signature: bufferToBase64URLString(credential.response.signature),
+                userHandle: credential.response.userHandle
+                    ? bufferToBase64URLString(credential.response.userHandle)
+                    : undefined,
+            },
+        })
+
+        const accessToken = data.access_token
+        CookieJS.set('_accessToken', accessToken) // Session cookie
+        axios.defaults.headers.Authorization = `Bearer ${ accessToken }`
+        router.post('/auth/verify', {}, {
+            headers: {
+                Authorization: `Bearer ${ accessToken }`,
+            },
+        })
+    } catch (e) {
+
+    }
+}
+
+const registerAuthnAuthentication = (key: string) => {
+    const accessToken = CookieJS.get('_accessToken')
+    if (!accessToken) {
+        window.location.href = '/auth/logout'
+    }
+
+    const jwt = JSON.parse(atob(accessToken.split('.')[1]));
+
+    localStorage.setItem('_webauthn', btoa(JSON.stringify({
+        userId: jwt.sub,
+        userKey: key,
+        pKey: jwt.pkey,
+    })))
+}
+
+export const useWebAuthn = () => {
+    return {
+        registerAuthnAuthentication,
+        getAuthnAuthConfiguration,
+        attemptAuthWithCredential,
+    }
+}
 
 export const useAuth = () => {
     const accessToken = CookieJS.get('_accessToken')

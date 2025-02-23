@@ -1,5 +1,9 @@
 <?php
 
+use App\Actions\Auth\GetBiometricAuthOptions;
+use App\Actions\Auth\HandleWebauthnLogin;
+use App\Actions\Settings\GetWebAuthnConfig;
+use App\Actions\Settings\HandleWebAuthnRegistration;
 use App\Actions\Vaults\CreateVault;
 use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\GetVaults;
@@ -11,6 +15,11 @@ use App\Actions\Vaults\VaultRecords\ShowVaultRecordValue;
 use App\Actions\Vaults\VaultRecords\UpdateVaultRecordValue;
 use App\Http\Middleware\AssertPKeyMiddleware;
 use Illuminate\Support\Facades\Route;
+
+Route::middleware('guest')->group(function () {
+    Route::post('webauthn/get-auth-options', GetBiometricAuthOptions::class);
+    Route::post('webauthn/login', HandleWebauthnLogin::class);
+});
 
 Route::middleware('auth:api')->group(function () {
     Route::middleware(AssertPKeyMiddleware::class)->group(function () {
@@ -33,4 +42,7 @@ Route::middleware('auth:api')->group(function () {
             });
         });
     });
+
+    Route::get('webauthn/get-authn-config', GetWebAuthnConfig::class);
+    Route::post('webauthn/register-authn', HandleWebAuthnRegistration::class);
 });
