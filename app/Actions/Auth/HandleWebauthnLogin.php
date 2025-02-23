@@ -39,8 +39,7 @@ class HandleWebauthnLogin
             throw new AuthorizationException;
         }
 
-        // TODO !important, this cant be on cache lol
-        Cache::put('oauth.pkey', $authData['pkey']);
+        Cache::put("oauth.pkey:$user->id", $authData['pkey'], 60);
 
         return [
             'access_token' => $user->createToken('Mini Vault PAC')->accessToken,

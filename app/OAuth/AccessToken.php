@@ -32,8 +32,7 @@ class AccessToken extends PassportAccessToken
         /** @var Client $client */
         $client = Client::query()->findOrFail($this->getClient()->getIdentifier());
         if (!!$client->getAttribute('requires_user_key')) {
-            // TODO !important, this cant be on cache lol
-            $pkey = Cache::pull('oauth.pkey');
+            $pkey = Cache::pull("oauth.pkey:{$this->getUserIdentifier()}");
 
             throw_if(!$pkey);
 
