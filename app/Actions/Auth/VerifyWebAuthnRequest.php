@@ -3,6 +3,8 @@
 namespace App\Actions\Auth;
 
 use App\DataTransferObjects\WebAuthn\WebAuthnRequestData;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -37,7 +39,14 @@ class VerifyWebAuthnRequest
             throw new BadRequestException;
         }
 
-        // TODO verify origin
+        $origin = Str::of($data->clientData->origin)
+            ->replace('https://', '')
+            ->replace('http://', '')
+            ->value();
+
+        if (!in_array($origin, Config::get('auth.webauthn.allowed-origins'))) {
+            throw new BadRequestException;
+        }
 
         return $data;
     }
