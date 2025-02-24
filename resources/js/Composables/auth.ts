@@ -1,13 +1,17 @@
 import CookieJS from 'js-cookie'
 import axios from 'axios'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { UserResource } from '~/types/resources'
 import { useEncryption } from '~/Composables/encryption'
+import { useToast } from 'vue-toastification'
 const page = usePage()
 const { bufferToBase64URLString } = useEncryption()
 
+const toast = useToast();
+
 const user = ref<UserResource | undefined>()
+const hasAuthnSetup = ref(!!localStorage.getItem('_webauthn'))
 
 const getGuestAxios = () => {
     const newInstance = axios.create()
@@ -65,7 +69,8 @@ const attemptAuthWithCredential = async (credential) => {
             },
         })
     } catch (e) {
-
+        toast.error('Something went wrong authenticating with authn');
+        console.error(e)
     }
 }
 
@@ -82,6 +87,7 @@ const registerAuthnAuthentication = (key: string) => {
         userKey: key,
         pKey: jwt.pkey,
     })))
+    hasAuthnSetup.value = true;
 }
 
 export const useWebAuthn = () => {
@@ -89,6 +95,7 @@ export const useWebAuthn = () => {
         registerAuthnAuthentication,
         getAuthnAuthConfiguration,
         attemptAuthWithCredential,
+        hasAuthnSetup,
     }
 }
 

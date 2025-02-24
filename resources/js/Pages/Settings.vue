@@ -2,7 +2,11 @@
     <PageLayout>
         <template #title>Settings</template>
         <template #content>
-            <Button @click="setup">Setup Biometrics</Button>
+            <div v-if="hasAuthnSetup" class="flex items-center gap-4">
+                <i class="pi pi-lock !text-3xl" />
+                <p>You have biometrics enabled</p>
+            </div>
+            <Button v-else @click="setupBiometrics">Setup Biometrics</Button>
         </template>
     </PageLayout>
 </template>
@@ -12,15 +16,19 @@ import { Button } from 'primevue'
 import axios from 'axios'
 import { useEncryption } from '~/Composables/encryption'
 import { useWebAuthn } from '~/Composables/auth'
+import { NavigatorCredential } from '~/types'
+import { POSITION, useToast } from 'vue-toastification'
+
+const toast = useToast();
 
 const { bufferToBase64URLString, base64URLStringToBuffer } = useEncryption()
-const { getAuthnAuthConfiguration, registerAuthnAuthentication } = useWebAuthn()
+const { hasAuthnSetup, getAuthnAuthConfiguration, registerAuthnAuthentication } = useWebAuthn()
 
-const setup = async () => {
+const setupBiometrics = async () => {
     try {
         const credential = await navigator.credentials.create(
             await getAuthnConfig()
-        )
+        ) as NavigatorCredential;
 
         const { id, rawId, response, type } = credential
 
@@ -40,8 +48,10 @@ const setup = async () => {
 
         registerAuthnAuthentication(data.key)
     } catch (e) {
-        // TODO error handling
-        alert(e.message)
+        toast.error('Something went wrong setting up biometrics', {
+            position: POSITION.BOTTOM_CENTER,
+            icon: 'pi pi-lock'
+        })
         console.error(e)
         return
     }

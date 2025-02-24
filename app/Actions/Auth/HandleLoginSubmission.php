@@ -28,8 +28,11 @@ class HandleLoginSubmission
             /** @var User $user */
             $user = Auth::user();
 
-            // TODO !important, this cant be on cache lol
-            Cache::put('oauth.pkey',  $user->getPKey($request->get('password')));
+            Cache::put(
+                "oauth.pkey:$user->id",
+                $user->getPKey($request->get('password')),
+                60,
+            );
 
             return Inertia::location($request->session()->get('url.intended', route('dashboard')));
         }

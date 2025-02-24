@@ -26,7 +26,7 @@ class HandleWebauthnLogin
             ->firstOrFail();
 
         $user = $authorization->user;
-        $authData = Cache::get("webauthn.auth:$user->id");
+        $authData = Cache::pull("webauthn.auth:$user->id");
         $expectedChallenge = $authData['challenge'] ?? '__invalid__';
 
         if ($requestData->clientData->challenge !== $expectedChallenge) {
@@ -39,8 +39,7 @@ class HandleWebauthnLogin
             throw new AuthorizationException;
         }
 
-        // TODO !important, this cant be on cache lol
-        Cache::put('oauth.pkey', $authData['pkey']);
+        Cache::put("oauth.pkey:$user->id", $authData['pkey'], 60);
 
         return [
             'access_token' => $user->createToken('Mini Vault PAC')->accessToken,
