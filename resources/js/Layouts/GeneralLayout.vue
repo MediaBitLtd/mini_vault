@@ -64,7 +64,7 @@
                     </div>
                 </nav>
             </aside>
-            <article class="flex-grow relative h-[100dvh] pt-[4rem] sm:pt-auto sm:mt-[4rem] mx-auto sm:mt-0">
+            <article class="flex-grow relative h-[100dvh] pt-[4rem] sm:pt-10 mx-auto sm:mt-0">
                 <slot />
             </article>
         </main>
