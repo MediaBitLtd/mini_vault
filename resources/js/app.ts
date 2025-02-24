@@ -8,7 +8,10 @@ import PrimeVue from 'primevue/config'
 import { Ripple } from 'primevue'
 import ConfirmationService from 'primevue/confirmationservice'
 import Preset from '~/theme'
+import Toast from 'vue-toastification'
+
 import 'primeicons/primeicons.css'
+import 'vue-toastification/dist/index.css'
 
 useDarkMode()
 
@@ -27,6 +30,7 @@ createInertiaApp({
         createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ConfirmationService)
+            .use(Toast)
             .use(PrimeVue, {
                 ripple: true,
                 theme: {

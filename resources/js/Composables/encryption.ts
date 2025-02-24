@@ -1,4 +1,5 @@
 const bufferToBase64URLString = (buffer: ArrayBuffer): string => {
+    // @ts-ignore
     const str = String.fromCharCode(...new Uint8Array(buffer));
     return btoa(str)
         .replaceAll('+', '-')

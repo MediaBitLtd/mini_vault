@@ -12,3 +12,15 @@ export type PageProps<
     }
     csrf_token: string;
 };
+
+export interface NavigatorCredential extends Credential {
+    rawId: ArrayBuffer;
+    getClientExtensionResults: () => unknown;
+    authenticatorAttachment: () => unknown;
+    response: {
+        getPublicKey: () => ArrayBuffer;
+        getAuthenticatorData: () => ArrayBuffer;
+        clientDataJSON: ArrayBuffer;
+        getTransports: () => string[];
+    }
+}

@@ -39,7 +39,7 @@
         </header>
         <main class="flex flex-grow max-h-full overflow-hidden bg-white dark:bg-neutral-900 dark:text-white">
             <aside
-                class="hidden sm:flex min-w-56 lg:min-w-72 bg-gray-200 border-r border-gray-500 dark:text-white dark:bg-stone-950 dark:border-black"
+                class="hidden sm:flex w-56 lg:w-72 bg-gray-200 border-r border-gray-500 dark:text-white dark:bg-stone-950 dark:border-black"
             >
                 <nav class="flex flex-col w-full pt-10 pb-5 gap-10">
                     <Link href="/" class="flex items-center px-10">
@@ -69,7 +69,7 @@
             </article>
         </main>
     </section>
-    <ConfirmDialog></ConfirmDialog>
+    <ConfirmDialog />
 </template>
 <script setup lang="ts">
 import { useAuth } from '~/Composables/auth'
