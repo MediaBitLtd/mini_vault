@@ -1,8 +1,10 @@
 <template>
     <Panel ref="panel" class="cursor-pointer" :header="title" collapsed @click="open">
-        <div v-for="recordValue in record.values" class="flex items-center gap-4">
-            <label :for="`record-field-${recordValue.id}`" class="font-semibold w-24">{{ recordValue.field.label }}</label>
-            <InputText fluid :id="`record-field-${recordValue.id}`" class="flex-auto" autocomplete="off" />
+        <div class="min-h-[50dvh]">
+            <div v-for="recordValue in record.values" class="flex items-center gap-4">
+                <label :for="`record-field-${recordValue.id}`" class="font-semibold w-24">{{ recordValue.field.label }}</label>
+                <InputText fluid :id="`record-field-${recordValue.id}`" class="flex-auto" autocomplete="off" />
+            </div>
         </div>
     </Panel>
 </template>

@@ -5,9 +5,12 @@ namespace App\Actions\Settings;
 use App\Actions\Auth\VerifyWebAuthnRequest;
 use App\Models\User;
 use App\Traits\Resources;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -45,6 +48,18 @@ class HandleWebAuthnRegistration
         if (!$user->biometric_key) {
             $user->biometric_key = hash('sha256', Str::random(32));
             $user->save();
+        }
+
+        return $user;
+    }
+
+    public function asController(ActionRequest $request): User
+    {
+        try {
+            $user = $this->handle($request);
+        } catch (Exception $exception) {
+            Log::debug('Someone tried webauthn and was rejected: ' . $exception->getMessage());
+            throw new AuthorizationException;
         }
 
         return $user;
