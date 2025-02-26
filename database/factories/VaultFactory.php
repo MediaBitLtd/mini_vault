@@ -15,7 +15,7 @@ class VaultFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => $this->faker->sentence(3),
+            'name' => $this->faker->text(30),
         ];
     }
 }
