@@ -42,6 +42,7 @@ export interface UserResource extends ModelResource {
 
 export interface CategoryResource extends ModelResource {
     name: string;
+    icon: string;
     fields: FieldResource[];
 }
 
@@ -58,11 +59,14 @@ export interface VaultResource extends ModelResource {
 
 export interface VaultRecordResource extends ModelResource {
     name: string;
+    is_favourite: boolean;
     category: CategoryResource;
+    values: VaultRecordValueResource[];
 }
 
-export interface VaultRecordVaultResource extends ModelResource {
+export interface VaultRecordValueResource extends ModelResource {
     value?: string;
     is_invalid?: boolean;
+    sensitive: boolean;
     field?: FieldResource;
 }

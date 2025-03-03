@@ -16,6 +16,7 @@ class FieldResource extends JsonResource
             'slug' => $this->slug,
             'label' => $this->label,
             'type' => $this->type,
+            'sensitive' => $this->sensitive,
         ];
     }
 }

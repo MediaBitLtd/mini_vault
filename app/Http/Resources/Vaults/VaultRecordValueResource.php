@@ -12,10 +12,15 @@ class VaultRecordValueResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        $includeValues = filter_var($request->get('include_values'), FILTER_VALIDATE_BOOL);
+
         return [
             'id' => $this->id,
 
-            'value' => $this->whenAppended('value'),
+            'value' => $this->when(
+                $this->hasAppended('value') || $includeValues,
+                !is_null($this->value) ? base64_encode($this->value) : null
+            ),
             $this->mergeWhen($this->hasAttribute('invalid'), [
                 'invalid' => true,
             ]),

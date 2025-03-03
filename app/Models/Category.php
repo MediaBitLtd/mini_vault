@@ -30,6 +30,7 @@ class Category extends Model
     // Relationships
     public function fields(): BelongsToMany
     {
-        return $this->belongsToMany(Field::class, 'category_field');
+        return $this->belongsToMany(Field::class, 'category_field')
+            ->orderByPivot('order');
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $slug
  * @property string $label
  * @property FieldType $type
+ * @property bool $sensitive
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -25,5 +26,6 @@ class Field extends Model
 
     protected $casts = [
         'type' => FieldType::class,
+        'sensitive' => 'boolean',
     ];
 }

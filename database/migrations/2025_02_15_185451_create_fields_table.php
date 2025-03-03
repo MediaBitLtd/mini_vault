@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('slug')->unique();
             $table->string('label');
             $table->string('type')->default('text');
+            $table->boolean('sensitive')->default(false);
             $table->timestamps();
         });
     }

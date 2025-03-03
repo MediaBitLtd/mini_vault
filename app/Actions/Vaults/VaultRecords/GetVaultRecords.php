@@ -19,6 +19,7 @@ class GetVaultRecords
     {
         return [
             'q' => 'sometimes|string',
+            'include_values' => 'sometimes|in:true,false,on,yes,no',
         ];
     }
 

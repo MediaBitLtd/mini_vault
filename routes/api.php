@@ -12,6 +12,7 @@ use App\Actions\Vaults\VaultRecords\CreateVaultRecord;
 use App\Actions\Vaults\VaultRecords\ShowVaultRecord;
 use App\Actions\Vaults\VaultRecords\GetVaultRecords;
 use App\Actions\Vaults\VaultRecords\ShowVaultRecordValue;
+use App\Actions\Vaults\VaultRecords\UpdateVaultRecord;
 use App\Actions\Vaults\VaultRecords\UpdateVaultRecordValue;
 use App\Http\Middleware\AssertPKeyMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,7 @@ Route::middleware('auth:api')->group(function () {
                     Route::get('', GetVaultRecords::class)->name('index');
                     Route::post('', CreateVaultRecord::class)->name('store');
                     Route::get('{record}', ShowVaultRecord::class)->name('show');
+                    Route::put('{record}', UpdateVaultRecord::class)->name('update');
 
                     Route::get('{record}/values/{value}', ShowVaultRecordValue::class)->name('values.show');
                     Route::put('{record}/values/{value}', UpdateVaultRecordValue::class)->name('values.update');

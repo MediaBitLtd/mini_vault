@@ -1,5 +1,5 @@
 <template>
-    <section class="flex flex-col items-center pt-5 sm:pt-10 h-full">
+    <section class="flex flex-col items-center pt-5 sm:pt-10 h-full max-w-[100dvw]">
         <header class="w-full px-5 mb-5 xl:max-w-4xl">
             <h1 class="text-3xl font-bold mb-4">
                 <slot name="title" />

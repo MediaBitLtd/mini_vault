@@ -41,7 +41,7 @@ const loadRecords = async (vault: VaultResource, { page, q } = { page: 1, q: und
     loadingRecords.value = true
     try {
         const { data } = await axios.get<CollectionResource<VaultRecordResource>>(`/vaults/${vault.id}/records`, {
-            params: { page, q },
+            params: { page, q, include_values: true },
         })
 
         records.value.push(...data.items)
