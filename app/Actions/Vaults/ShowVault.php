@@ -3,6 +3,7 @@
 namespace App\Actions\Vaults;
 
 use App\Http\Resources\Vaults\VaultResource;
+use App\Models\Category;
 use App\Models\Vault;
 use App\Traits\Resources;
 use Illuminate\Http\JsonResponse;
@@ -33,8 +34,11 @@ class ShowVault
             return redirect()->route('dashboard')->with('message', 'Invalid vault');
         }
 
+        $categories = Category::all();
+
         return Inertia::render('Vaults/VaultsShow', [
             'vault' => $vault,
+            'categories' => $categories,
         ]);
     }
 

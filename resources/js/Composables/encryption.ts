@@ -6,7 +6,6 @@ const bufferToBase64URLString = (buffer: ArrayBuffer): string => {
         .replaceAll('/', '_')
         .replace('=', '')
 }
-
 const base64URLStringToBuffer = (base64URLString: string): ArrayBuffer => {
     // Convert from Base64URL to Base64
     const base64 = base64URLString.replace(/-/g, '+').replace(/_/g, '/');
@@ -34,10 +33,48 @@ const base64URLStringToBuffer = (base64URLString: string): ArrayBuffer => {
     return buffer;
 }
 
+const generatePassword = ({
+    length = 12,
+    includeLetters = true,
+    includeNumbers = true,
+    includeSymbols = true,
+} = {}) => {
+    let charSet = ''
+    let newPassword = ''
+
+    if (includeLetters) {
+        charSet += Array.from({ length: 26 }, (_, i) =>
+            String.fromCharCode(97 + i)
+        ).join('') + Array.from({ length: 26 }, (_, i) =>
+            String.fromCharCode(65 + i)
+        ).join('')
+    }
+
+    if(includeNumbers) {
+        charSet += Array.from({ length: 10 }, (_, i) =>
+            String.fromCharCode(48 + i)
+        ).join('')
+    }
+
+    if (includeSymbols) {
+        charSet += '!$@#%&?^'
+    }
+
+    if (charSet.length > 0) {
+        const randomValues = crypto.getRandomValues(new Uint32Array(length))
+        for (let i = 0; i < length; i++) {
+            newPassword += charSet[randomValues[i] % charSet.length]
+        }
+    }
+
+    return newPassword
+}
+
 
 export const useEncryption = () => {
     return {
         bufferToBase64URLString,
         base64URLStringToBuffer,
+        generatePassword,
     }
 }

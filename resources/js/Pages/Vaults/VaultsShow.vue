@@ -12,8 +12,8 @@
         </template>
         <template #content>
             <ul v-if="records.length" class="space-y-4">
-                <li v-for="record in records">
-                    <VaultRecordListItem :vault :record />
+                <li v-for="(record, index) in records">
+                    <VaultRecordListItem :vault :record :key="record.id" @delete="records.splice(index, 1)" />
                 </li>
             </ul>
         </template>
@@ -23,9 +23,15 @@
             </div>
         </template>
     </PageLayout>
+    <RecordCreateModal
+        :vault
+        :categories
+        v-model:visible="createVisible"
+        @submitted="records.push($event)"
+    />
 </template>
 <script setup lang="ts">
-import { VaultResource } from '~/types/resources'
+import { CategoryResource, VaultResource } from '~/types/resources'
 import { useConfirm, Button, Menu } from 'primevue'
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
@@ -34,13 +40,17 @@ import SearchBar from '~/Components/SearchBar.vue'
 import VaultRecordListItem from '~/Components/VaultRecords/VaultRecordListItem.vue'
 import PageLayout from '~/Layouts/PageLayout.vue'
 import { MenuItem } from 'primevue/menuitem'
+import RecordCreateModal from '~/Components/VaultRecords/RecordCreateModal.vue'
 
 const props = defineProps<{
     vault: VaultResource;
+    categories: CategoryResource[];
 }>()
 
 const confirm = useConfirm()
 const { loadVaults, records, loadRecords } = useVaults()
+
+const createVisible = ref(false)
 
 const menu = ref()
 const items = ref<MenuItem[]>([
@@ -79,7 +89,7 @@ const items = ref<MenuItem[]>([
 ])
 
 const addRecord = () => {
-    console.log('TODO')
+    createVisible.value = true
 }
 
 loadRecords(props.vault);

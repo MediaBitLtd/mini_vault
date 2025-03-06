@@ -38,9 +38,12 @@
                             v-else
                             severity="contrast"
                             size="small"
+                            :disabled="saving"
                             :model="saveMenu"
                             @click="saveRecord"
-                        >Save
+                        >
+                            <span v-if="!saving">Save</span>
+                            <SpinnerLoader v-else />
                         </SplitButton>
                     </div>
                 </div>
@@ -56,13 +59,13 @@
     </Card>
 </template>
 <script setup lang="ts">
-import { InputText, SplitButton, Button, Card } from 'primevue'
+import { SplitButton, Button, Card, useConfirm } from 'primevue'
 import { VaultRecordResource, VaultResource } from '~/types/resources'
 import { computed, ref } from 'vue'
 import RecordValue from '~/Components/VaultRecords/RecordValue.vue'
 import { MenuItem } from 'primevue/menuitem'
 import axios from 'axios'
-import SpinnerLoader from '~/Composables/SpinnerLoader.vue'
+import SpinnerLoader from '~/Components/SpinnerLoader.vue'
 import { useErrorHandler } from '~/Composables/errors'
 import { useToast } from 'vue-toastification'
 
@@ -71,6 +74,9 @@ const props = defineProps<{
     record: VaultRecordResource,
 }>()
 
+const emit = defineEmits(['delete'])
+
+const confirm = useConfirm()
 const toast = useToast();
 const { handleAPIError } = useErrorHandler()
 
@@ -93,6 +99,27 @@ const saveMenu = computed(() => [
     {
         label: 'Delete',
         icon: 'pi pi-trash',
+        command: () => {
+            confirm.require({
+                message: 'Are you sure you want to permanently delete this record?',
+                header: 'Confirmation',
+                icon: 'pi pi-exclamation-triangle',
+                rejectProps: {
+                    label: 'Cancel',
+                    severity: 'secondary',
+                    outlined: true,
+                },
+                acceptProps: {
+                    label: 'Delete',
+                    severity: 'danger',
+                },
+                accept: async () => {
+                    await axios.delete(`/vaults/${props.vault.id}/records/${props.record.id}`)
+
+                    emit('delete')
+                },
+            })
+        },
     },
     {
         separator: true,

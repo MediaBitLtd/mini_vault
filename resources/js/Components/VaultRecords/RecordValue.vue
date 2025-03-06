@@ -2,13 +2,22 @@
     <div class="space-y-1 mb-6">
         <span class="block font-bold text-stone-500">{{ recordValue.field.label }}</span>
         <template v-if="editing">
-            <Password
-                v-if="props.recordValue.field.type === 'password'"
-                v-model="value"
-                autocomplete="off"
-                toggle-mask
-                fluid
-            />
+            <div v-if="props.recordValue.field.type === 'password'" class="flex gap-2">
+                <Password
+                    ref="passwordField"
+                    v-model="value"
+                    class="flex-grow"
+                    autocomplete="off"
+                    medium-regex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                    strong-regex="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}"
+                    toggle-mask
+                    :pt-options="{root: { state: { unmasked: true } } }"
+                    fluid
+                />
+                <Button variant="text" severity="secondary" @click="value = generatePassword()">
+                    <i class="pi pi-sync" />
+                </Button>
+            </div>
             <Textarea
                 v-else-if="props.recordValue.field.type === 'textarea'"
                 v-model="value"
@@ -33,10 +42,11 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ContextMenu, Textarea, InputText, Password } from 'primevue'
+import { ContextMenu, Button, Textarea, InputText, Password } from 'primevue'
 import { VaultRecordValueResource } from '~/types/resources'
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { MenuItem } from 'primevue/menuitem'
+import { useEncryption } from '~/Composables/encryption'
 
 const props = defineProps<{
     recordValue: VaultRecordValueResource;
@@ -45,7 +55,10 @@ const props = defineProps<{
 
 const emit = defineEmits(['update:recordValue'])
 
+const { generatePassword } = useEncryption()
+
 const menu = ref()
+const passwordField = ref()
 
 const value = ref<VaultRecordValueResource['value']>(props.recordValue.value ? atob(props.recordValue.value) : null)
 const items = computed<MenuItem[]>(() => ([
@@ -90,5 +103,16 @@ watch(
     () => {
         value.value = props.recordValue.value ? atob(props.recordValue.value) : null
     }
+)
+
+watch(
+    () => props.editing,
+    async () => {
+        if (props.editing && props.recordValue.field.type === 'password' && !value.value?.trim()) {
+            value.value = generatePassword()
+            await nextTick()
+            passwordField.value.unmasked = true
+        }
+    },
 )
 </script>
