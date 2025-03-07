@@ -22,7 +22,7 @@ Route::get('auth/logout', function () {
 
 Route::post('auth/verify', function () {
     Auth::guard('web')->login(Auth::guard('api')->user());
-    return Inertia::location('/');
+    return redirect()->route('dashboard');
 })->middleware('auth:api');
 
 Route::get('auth/callback', HandleAuthenticationCallback::class)->middleware('auth')->name('auth.callback');
