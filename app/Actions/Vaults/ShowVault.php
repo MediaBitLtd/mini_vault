@@ -4,6 +4,7 @@ namespace App\Actions\Vaults;
 
 use App\Http\Resources\Vaults\VaultResource;
 use App\Models\Category;
+use App\Models\Field;
 use App\Models\Vault;
 use App\Traits\Resources;
 use Illuminate\Http\JsonResponse;
@@ -35,10 +36,12 @@ class ShowVault
         }
 
         $categories = Category::all();
+        $fields = Field::all();
 
         return Inertia::render('Vaults/VaultsShow', [
             'vault' => $vault,
             'categories' => $categories,
+            'fields' => $fields,
         ]);
     }
 

@@ -1,8 +1,8 @@
 <template>
     <div class="space-y-1 mb-6">
         <span class="block font-bold text-stone-500">{{ recordValue.field.label }}</span>
-        <template v-if="editing">
-            <div v-if="props.recordValue.field.type === 'password'" class="flex gap-2">
+        <div v-if="editing" class="flex gap-2">
+            <template v-if="props.recordValue.field.type === 'password'">
                 <Password
                     ref="passwordField"
                     v-model="value"
@@ -14,10 +14,10 @@
                     :pt-options="{root: { state: { unmasked: true } } }"
                     fluid
                 />
-                <Button variant="text" severity="secondary" @click="value = generatePassword()">
+                <Button variant="text" severity="secondary" @click="value = generatePassword()" size="small">
                     <i class="pi pi-sync" />
                 </Button>
-            </div>
+            </template>
             <Textarea
                 v-else-if="props.recordValue.field.type === 'textarea'"
                 v-model="value"
@@ -33,7 +33,10 @@
                 autocomplete="off"
                 fluid
             />
-        </template>
+            <Button severity="danger" variant="text" size="small" @click="deleteField">
+                <i class="pi pi-trash" />
+            </Button>
+        </div>
         <span v-else @click="menu.show" @contextmenu.prevent="menu.show" style="user-select:none;">
             {{ recordValue.field.sensitive ? censured : value || '-' }}
         </span>
@@ -53,7 +56,7 @@ const props = defineProps<{
     editing?: boolean;
 }>()
 
-const emit = defineEmits(['update:recordValue'])
+const emit = defineEmits(['update:recordValue', 'delete'])
 
 const { generatePassword } = useEncryption()
 
@@ -88,6 +91,9 @@ const copyValue = async () => {
 const openUrl = () => {
     // todo this is not working on pwa
     window.open(value.value)
+}
+const deleteField = () => {
+    emit('delete', props.recordValue)
 }
 
 watch(

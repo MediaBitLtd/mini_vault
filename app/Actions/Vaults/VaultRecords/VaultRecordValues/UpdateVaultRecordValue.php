@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Vaults\VaultRecords;
+namespace App\Actions\Vaults\VaultRecords\VaultRecordValues;
 
 use App\Exceptions\InvalidRecordValueException;
 use App\Http\Resources\Vaults\VaultRecordValueResource;

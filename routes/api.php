@@ -9,11 +9,13 @@ use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\GetVaults;
 use App\Actions\Vaults\ShowVault;
 use App\Actions\Vaults\VaultRecords\CreateVaultRecord;
-use App\Actions\Vaults\VaultRecords\ShowVaultRecord;
+use App\Actions\Vaults\VaultRecords\DeleteVaultRecord;
 use App\Actions\Vaults\VaultRecords\GetVaultRecords;
-use App\Actions\Vaults\VaultRecords\ShowVaultRecordValue;
+use App\Actions\Vaults\VaultRecords\ShowVaultRecord;
 use App\Actions\Vaults\VaultRecords\UpdateVaultRecord;
-use App\Actions\Vaults\VaultRecords\UpdateVaultRecordValue;
+use App\Actions\Vaults\VaultRecords\VaultRecordValues\ShowVaultRecordValue;
+use App\Actions\Vaults\VaultRecords\VaultRecordValues\StoreVaultRecordValue;
+use App\Actions\Vaults\VaultRecords\VaultRecordValues\UpdateVaultRecordValue;
 use App\Http\Middleware\AssertPKeyMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -37,9 +39,13 @@ Route::middleware('auth:api')->group(function () {
                     Route::post('', CreateVaultRecord::class)->name('store');
                     Route::get('{record}', ShowVaultRecord::class)->name('show');
                     Route::put('{record}', UpdateVaultRecord::class)->name('update');
+                    Route::delete('{record}', DeleteVaultRecord::class)->name('delete');
+
+                    Route::post('{record}/values', StoreVaultRecordValue::class)->name('values.store');
 
                     Route::get('{record}/values/{value}', ShowVaultRecordValue::class)->name('values.show');
                     Route::put('{record}/values/{value}', UpdateVaultRecordValue::class)->name('values.update');
+                    Route::delete('{record}/values/{value}', StoreVaultRecordValue::class)->name('values.destroy');
                 });
             });
         });

@@ -13,7 +13,13 @@
         <template #content>
             <ul v-if="records.length" class="space-y-4">
                 <li v-for="(record, index) in records">
-                    <VaultRecordListItem :vault :record :key="record.id" @delete="records.splice(index, 1)" />
+                    <VaultRecordListItem
+                        :vault
+                        :record
+                        :key="record.id"
+                        :fields
+                        @delete="records.splice(index, 1)"
+                    />
                 </li>
             </ul>
         </template>
@@ -31,7 +37,7 @@
     />
 </template>
 <script setup lang="ts">
-import { CategoryResource, VaultResource } from '~/types/resources'
+import { CategoryResource, FieldResource, VaultResource } from '~/types/resources'
 import { useConfirm, Button, Menu } from 'primevue'
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
@@ -45,6 +51,7 @@ import RecordCreateModal from '~/Components/VaultRecords/RecordCreateModal.vue'
 const props = defineProps<{
     vault: VaultResource;
     categories: CategoryResource[];
+    fields: FieldResource[];
 }>()
 
 const confirm = useConfirm()

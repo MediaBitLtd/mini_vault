@@ -23,7 +23,7 @@ class UpdateVaultRecord
             'name' => 'sometimes|string|max:255',
             'values' => 'sometimes|array',
             'values.*.id' => 'required|exists:vault_record_values,id',
-            'values.*.value' => 'required|nullable|string',
+            'values.*.value' => 'sometimes|nullable|string',
             'is_favourite' => 'sometimes|boolean',
         ];
     }
@@ -56,6 +56,11 @@ class UpdateVaultRecord
                         ? base64_decode($value['value'])
                         : null;
                     $valueModel->save();
+                }
+
+                $toDelete = $record->values->whereNotIn('id', collect($input['values'])->pluck('id'));
+                foreach ($toDelete as $value) {
+                    $value->delete();
                 }
 
                 unset($input['values']);

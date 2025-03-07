@@ -2,16 +2,14 @@
 
 namespace App\Actions\Vaults\VaultRecords;
 
-use App\Http\Resources\Vaults\VaultRecordValueResource;
 use App\Models\Vault;
 use App\Models\VaultRecord;
-use App\Models\VaultRecordValue;
 use App\Traits\Resources;
-use Illuminate\Http\JsonResponse;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-class ShowVaultRecordValue
+class DeleteVaultRecord
 {
     use AsAction;
     use Resources;
@@ -24,19 +22,16 @@ class ShowVaultRecordValue
         $record = $request->route('record');
 
         return $request->user()->can('view', $vault) && $vault->isUnlockable
-            && $request->user()->can('view', $record);
+            && $request->user()->can('forceDelete', $record);
     }
 
-    public function handle(Vault $vault, VaultRecord $record, VaultRecordValue $value): VaultRecordValue
+    public function handle(Vault $vault, VaultRecord $record): void
     {
-        return $value->load('field')->append('value');
+        $record->forceDelete();
     }
 
-    public function jsonResponse(VaultRecordValue $value): JsonResponse
+    public function jsonResponse(): JsonResponse
     {
-       return $this->sendResource(
-           $value,
-           VaultRecordValueResource::class
-       );
+        return $this->sendSuccessfulResponse();
     }
 }

@@ -9,6 +9,8 @@ use Illuminate\Contracts\Encryption\EncryptException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
@@ -31,6 +33,18 @@ class VaultRecordValue extends Model
     protected $hidden = [
         'value',
     ];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        parent::creating(function (self $value) {
+            if (empty($value->uid)) {
+                $value->uid = Str::uuid()->toString();
+                $value->value = null; // This still encrypts the value
+            }
+        });
+    }
 
     // Relationships
     public function record(): BelongsTo
@@ -68,7 +82,13 @@ class VaultRecordValue extends Model
             set: function ($value) {
                 $encryptor = $this->record->vault->getEncrypter();
                 try {
-                    $data = $encryptor->decrypt($this->getRawOriginal('value'));
+                    $data = $this->getRawOriginal('value')
+                        ? $encryptor->decrypt($this->getRawOriginal('value'))
+                        : [
+                            'uid' => $this->uid,
+                            'originator' => Auth::id(),
+                            'value' => null,
+                        ];
                 } catch (DecryptException) {
                     throw new InvalidRecordValueException;
                 }

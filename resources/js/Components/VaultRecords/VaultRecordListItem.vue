@@ -49,18 +49,38 @@
                 </div>
                 <div class="min-h-[50dvh] relative">
                     <RecordValue
-                        v-for="recordValue in record.values"
+                        v-for="(recordValue, index) in record.values"
+                        :key="recordValue.id"
                         :record-value="recordValue"
                         :editing
+                        @delete="record.values.splice(index, 1)"
                     />
+
+                    <Button v-if="editing" @click="addingNewField = true">Add Field</Button>
                 </div>
             </div>
         </template>
     </Card>
+    <Dialog
+        v-model:visible="addingNewField"
+        modal
+        header="Add new field"
+        :style="{ width: '25rem' }"
+    >
+        <Select
+            v-model="newField"
+            class="mb-4"
+            :options="fields"
+            option-label="label"
+            option-value="id"
+            fluid
+        />
+        <Button size="small" fluid :loading="savingNewField" @click="addField" >Add</Button>
+    </Dialog>
 </template>
 <script setup lang="ts">
-import { SplitButton, Button, Card, useConfirm } from 'primevue'
-import { VaultRecordResource, VaultResource } from '~/types/resources'
+import { Dialog, Select, SplitButton, Button, Card, useConfirm } from 'primevue'
+import { FieldResource, VaultRecordResource, VaultRecordValueResource, VaultResource } from '~/types/resources'
 import { computed, ref } from 'vue'
 import RecordValue from '~/Components/VaultRecords/RecordValue.vue'
 import { MenuItem } from 'primevue/menuitem'
@@ -72,6 +92,7 @@ import { useToast } from 'vue-toastification'
 const props = defineProps<{
     vault: VaultResource,
     record: VaultRecordResource,
+    fields: FieldResource[],
 }>()
 
 const emit = defineEmits(['delete'])
@@ -85,6 +106,9 @@ const opened = ref(false)
 const editing = ref(false)
 const intentsToClose = ref(false)
 const existingValues = ref(undefined)
+const addingNewField = ref(false)
+const savingNewField = ref(false)
+const newField = ref(props.fields[0]?.id)
 
 const saving = ref(false)
 const savingFavourite = ref(false)
@@ -165,10 +189,31 @@ const toggleFavourite = async () => {
         })
 
         props.record.is_favourite = data?.is_favourite
+        addingNewField.value = false
     } catch (e) {
         handleAPIError(e)
     } finally {
         savingFavourite.value = false
+    }
+}
+
+const addField = async () => {
+    savingNewField.value = true
+
+    try {
+        const { data } = await axios.post<VaultRecordValueResource>(`/vaults/${ props.vault.id }/records/${props.record.id}/values`, {
+            field_id: newField.value,
+        })
+
+        newField.value = props.fields[0]?.id
+        props.record.values.push(data)
+        existingValues.value?.push(data)
+        intentsToClose.value = false
+        addingNewField.value = false
+    } catch (e) {
+        handleAPIError(e)
+    } finally {
+        savingNewField.value = false
     }
 }
 
