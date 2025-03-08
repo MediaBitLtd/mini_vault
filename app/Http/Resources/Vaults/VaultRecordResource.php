@@ -20,6 +20,8 @@ class VaultRecordResource extends JsonResource
             'category' => CategoryResource::make($this->whenLoaded('category')),
             'values' => VaultRecordValueResource::collection($this->whenLoaded('values')),
 
+            'vault' => VaultResource::make($this->whenLoaded('vault')),
+
             'created_at' => datetime($this->created_at),
             'updated_at' => datetime($this->updated_at),
         ];

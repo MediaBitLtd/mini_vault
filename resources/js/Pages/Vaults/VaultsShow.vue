@@ -3,7 +3,7 @@
         <template #title>{{ vault.name }}</template>
         <template #header>
             <div class="flex flex-col sm:flex-row gap-2">
-                <SearchBar class="flex-1"/>
+                <SearchBar v-model="search" class="flex-1" :disabled="!!editing.length" />
                 <Button class="!px-5" severity="contrast" variant="outlined" @click="menu.toggle($event)">
                     Options <i class="pi pi-cog"></i>
                 </Button>
@@ -18,10 +18,12 @@
                         :record
                         :key="record.id"
                         :fields
+                        @editing="$event ? editing.push(true) : editing.pop()"
                         @delete="records.splice(index, 1)"
                     />
                 </li>
             </ul>
+            <!--TODO pagination-->
         </template>
         <template #footer>
             <div class="flex gap-3 px-5 py-4 sm:p-0 border-t-2 border-neutral-200 dark:border-stone-700 dark:bg-stone-950">
@@ -39,7 +41,7 @@
 <script setup lang="ts">
 import { CategoryResource, FieldResource, VaultResource } from '~/types/resources'
 import { useConfirm, Button, Menu } from 'primevue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { router } from '@inertiajs/vue3'
 import { useVaults } from '~/Composables/vaults'
 import SearchBar from '~/Components/SearchBar.vue'
@@ -47,6 +49,8 @@ import VaultRecordListItem from '~/Components/VaultRecords/VaultRecordListItem.v
 import PageLayout from '~/Layouts/PageLayout.vue'
 import { MenuItem } from 'primevue/menuitem'
 import RecordCreateModal from '~/Components/VaultRecords/RecordCreateModal.vue'
+import { debouce } from '~/utils/debouce'
+import { useDebounce } from '~/Composables/debouce'
 
 const props = defineProps<{
     vault: VaultResource;
@@ -56,8 +60,11 @@ const props = defineProps<{
 
 const confirm = useConfirm()
 const { loadVaults, records, loadRecords } = useVaults()
+const debounce = useDebounce();
 
+const search = ref('')
 const createVisible = ref(false)
+const editing = ref([])
 
 const menu = ref()
 const items = ref<MenuItem[]>([
@@ -99,5 +106,19 @@ const addRecord = () => {
     createVisible.value = true
 }
 
+const applySearch = () => {
+    loadRecords(props.vault, {
+        q: search.value?.trim() ? search.value : undefined,
+        page: 1,
+    });
+}
+
 loadRecords(props.vault);
+
+watch(
+    () => search.value,
+    () => {
+        debounce(() => applySearch())
+    }
+)
 </script>

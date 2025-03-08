@@ -81,7 +81,7 @@
 <script setup lang="ts">
 import { Dialog, Select, SplitButton, Button, Card, useConfirm } from 'primevue'
 import { FieldResource, VaultRecordResource, VaultRecordValueResource, VaultResource } from '~/types/resources'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import RecordValue from '~/Components/VaultRecords/RecordValue.vue'
 import { MenuItem } from 'primevue/menuitem'
 import axios from 'axios'
@@ -95,7 +95,7 @@ const props = defineProps<{
     fields: FieldResource[],
 }>()
 
-const emit = defineEmits(['delete'])
+const emit = defineEmits(['delete', 'editing'])
 
 const confirm = useConfirm()
 const toast = useToast();
@@ -245,4 +245,9 @@ const revertChanges = () => {
         opened.value = false
     }
 }
+
+watch(
+    () => editing.value,
+    () => emit('editing', editing.value)
+)
 </script>

@@ -4,14 +4,12 @@ use App\Actions\Auth\HandleAuthenticationCallback;
 use App\Actions\Auth\HandleLoginSubmission;
 use App\Actions\Auth\ShowLoginPage;
 use App\Actions\Dashboard\ShowDashboardPage;
-use App\Actions\Groups\ShowAll;
 use App\Actions\Groups\ShowFavourites;
 use App\Actions\Settings\ShowSettingsPage;
 use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\ShowVault;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('auth/login', ShowLoginPage::class)->name('login');
 Route::post('auth/login', HandleLoginSubmission::class)->name('login.submit');
@@ -30,7 +28,6 @@ Route::get('auth/callback', HandleAuthenticationCallback::class)->middleware('au
 Route::middleware('auth')->group(function () {
     Route::get('/', ShowDashboardPage::class)->name('dashboard');
 
-    Route::get('all', ShowAll::class);
     Route::get('favourites', ShowFavourites::class);
 
     // Vaults

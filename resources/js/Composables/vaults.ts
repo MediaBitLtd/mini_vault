@@ -54,12 +54,39 @@ const loadRecords = async (vault: VaultResource, { page, q } = { page: 1, q: und
     }
 }
 
+const loadFavourites = async ({ page, q } = { page: 1, q: undefined }) => {
+    if (loadingRecords.value) {
+        return
+    }
+
+    if (page === 1) {
+        records.value = [];
+        lastLoadedPage.value = 1;
+    }
+
+    loadingRecords.value = true
+    try {
+        const { data } = await axios.get<CollectionResource<VaultRecordResource>>(`/favourites`, {
+            params: { page, q, include_values: true },
+        })
+
+        records.value.push(...data.items)
+        lastLoadedPage.value = data.meta.page
+        lastPage.value = data.meta.page >= data.meta.last_page
+    } catch (e) {
+        handleAPIError(e)
+    } finally {
+        loadingRecords.value = false;
+    }
+}
+
 export const useVaults = () => {
     if (!vaults.value) {
         loadVaults()
     }
 
     return {
+        loadFavourites,
         loadingRecords,
         loadingVaults,
         loadRecords,

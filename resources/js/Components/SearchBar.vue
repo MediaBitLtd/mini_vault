@@ -1,6 +1,6 @@
 <template>
     <IconField>
-        <InputText fluid v-model="search" placeholder="Search" />
+        <InputText fluid v-model="search" placeholder="Search" :disabled />
         <InputIcon class="pi pi-search" />
     </IconField>
 </template>
@@ -10,6 +10,7 @@ import { ref, watch } from 'vue'
 
 const props = defineProps<{
     modelValue?: string;
+    disabled?: boolean;
 }>()
 
 const emit = defineEmits(['update:modelValue']);

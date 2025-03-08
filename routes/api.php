@@ -2,6 +2,7 @@
 
 use App\Actions\Auth\GetBiometricAuthOptions;
 use App\Actions\Auth\HandleWebauthnLogin;
+use App\Actions\Groups\ShowFavourites;
 use App\Actions\Settings\GetWebAuthnConfig;
 use App\Actions\Settings\HandleWebAuthnRegistration;
 use App\Actions\Vaults\CreateVault;
@@ -49,6 +50,7 @@ Route::middleware('auth:api')->group(function () {
                 });
             });
         });
+        Route::get('favourites', ShowFavourites::class)->name('favourites');
     });
 
     Route::get('webauthn/get-authn-config', GetWebAuthnConfig::class);

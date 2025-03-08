@@ -3,11 +3,6 @@
         <section>
             <ul class="flex flex-col">
                 <li>
-                    <Link href="/all">
-                        All Items
-                    </Link>
-                </li>
-                <li>
                     <Link href="/favourites">
                         Favourites
                     </Link>
