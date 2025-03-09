@@ -33,17 +33,24 @@ class VaultRecordFactory extends Factory
             }
 
             foreach ($record->values as $value) {
-                $value->value = rand(0, 100) < 70
+                $value->value = rand(0, 100) < 80
                     ? match ($value->field->slug) {
                         'website' => $this->faker->url(),
                         'password' => $this->faker->password(),
                         'username' => $this->faker->userName(),
                         'note' => $this->faker->realTextBetween(150, 400),
+                        'pin' => str_pad($this->faker->randomNumber($n = rand(4, 6)), $n, '0', STR_PAD_LEFT),
+                        '2fa' => json_encode([
+                            'period' => 30,
+                            'secret' => $this->faker->uuid(),
+                        ]),
                         default => $this->faker->word(),
                     }
                     : null;
 
-                $value->name = $this->faker->boolean() ? $this->faker->word() : null;
+                $value->name = rand(0, 100) < 30
+                    ? $this->faker->word() . " ({$value->field->slug})"
+                    : null;
 
                 $value->save();
             }
