@@ -13,7 +13,7 @@ use Illuminate\Validation\Validator;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class CreateVault
+class StoreVault
 {
     use AsAction;
     use Resources;

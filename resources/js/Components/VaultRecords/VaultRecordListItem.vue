@@ -67,19 +67,25 @@
         header="Add new field"
         :style="{ width: '25rem' }"
     >
-        <Select
-            v-model="newField"
-            class="mb-4"
-            :options="fields"
-            option-label="label"
-            option-value="id"
-            fluid
-        />
-        <Button size="small" fluid :loading="savingNewField" @click="addField" >Add</Button>
+        <div class="flex flex-col gap-4">
+            <InputText
+                v-model="newName"
+                placeholder="Name (optional)"
+                fluid
+            />
+            <Select
+                v-model="newField"
+                :options="fields"
+                option-label="label"
+                option-value="id"
+                fluid
+            />
+            <Button size="small" fluid :loading="savingNewField" @click="addField" >Add</Button>
+        </div>
     </Dialog>
 </template>
 <script setup lang="ts">
-import { Dialog, Select, SplitButton, Button, Card, useConfirm } from 'primevue'
+import { Dialog, Select, SplitButton, InputText, Button, Card, useConfirm } from 'primevue'
 import { FieldResource, VaultRecordResource, VaultRecordValueResource, VaultResource } from '~/types/resources'
 import { computed, ref, watch } from 'vue'
 import RecordValue from '~/Components/VaultRecords/RecordValue.vue'
@@ -108,6 +114,7 @@ const intentsToClose = ref(false)
 const existingValues = ref(undefined)
 const addingNewField = ref(false)
 const savingNewField = ref(false)
+const newName = ref<string | undefined>(undefined)
 const newField = ref(props.fields[0]?.id)
 
 const saving = ref(false)
@@ -203,9 +210,11 @@ const addField = async () => {
     try {
         const { data } = await axios.post<VaultRecordValueResource>(`/vaults/${ props.vault.id }/records/${props.record.id}/values`, {
             field_id: newField.value,
+            name: newName.value,
         })
 
         newField.value = props.fields[0]?.id
+        newName.value = undefined
         props.record.values.push(data)
         existingValues.value?.push(data)
         intentsToClose.value = false
@@ -249,5 +258,13 @@ const revertChanges = () => {
 watch(
     () => editing.value,
     () => emit('editing', editing.value)
+)
+watch(
+    () => addingNewField.value,
+    () => {
+        if (!addingNewField.value) {
+            newName.value = undefined
+        }
+    }
 )
 </script>

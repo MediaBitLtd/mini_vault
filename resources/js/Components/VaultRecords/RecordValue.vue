@@ -1,6 +1,6 @@
 <template>
     <div class="space-y-1 mb-6">
-        <span class="block font-bold text-stone-500">{{ recordValue.field.label }}</span>
+        <span class="block font-bold text-stone-500">{{ recordValue.name || recordValue.field.label }}</span>
         <div v-if="editing" class="flex gap-2">
             <template v-if="props.recordValue.field.type === 'password'">
                 <Password

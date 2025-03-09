@@ -20,6 +20,7 @@ class StoreVaultRecordValue
     {
         return [
             'field_id' => 'required|exists:fields,id',
+            'name' => 'sometimes|nullable|max:50',
         ];
     }
 
@@ -36,9 +37,7 @@ class StoreVaultRecordValue
 
     public function handle(Vault $vault, VaultRecord $record, ActionRequest $request): VaultRecordValue
     {
-        return $record->values()->create([
-            'field_id' => $request->get('field_id'),
-        ])->load('field');
+        return $record->values()->create($request->validated())->load('field');
     }
 
     public function jsonResponse(VaultRecordValue $value): JsonResponse

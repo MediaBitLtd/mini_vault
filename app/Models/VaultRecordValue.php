@@ -16,6 +16,7 @@ use Illuminate\Support\Str;
  * @property int $id
  * @property int $vault_record_id
  * @property int $field_id
+ * @property string|null $name
  * @property string $uid
  * @property string $value
  * @property Carbon|null $created_at

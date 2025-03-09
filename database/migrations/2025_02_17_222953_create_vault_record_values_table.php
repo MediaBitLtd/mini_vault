@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('vault_record_id')->constrained()->cascadeOnDelete();
             $table->foreignId('field_id')->constrained();
+            $table->string('name', 50)->nullable();
             $table->string('uid')->unique();
             $table->mediumText('value');
             $table->timestamps();

@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('vault_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained();
-            $table->string('name')->nullable();
+            $table->string('name', 50)->nullable();
             $table->boolean('is_favourite')->default(false)->index();
             $table->timestamps();
             $table->softDeletes();

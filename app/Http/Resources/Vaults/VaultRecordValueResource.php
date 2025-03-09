@@ -17,6 +17,8 @@ class VaultRecordValueResource extends JsonResource
         return [
             'id' => $this->id,
 
+            'name' => $this->name,
+
             'value' => $this->when(
                 $this->hasAppended('value') || $includeValues,
                 !is_null($this->value) ? base64_encode($this->value) : null

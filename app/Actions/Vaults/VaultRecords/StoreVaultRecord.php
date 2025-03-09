@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class CreateVaultRecord
+class StoreVaultRecord
 {
     use AsAction;
     use Resources;
@@ -20,7 +20,7 @@ class CreateVaultRecord
     {
         return [
             'category_id' => 'required|exists:categories,id',
-            'name' => 'sometimes|nullable|string|max:255',
+            'name' => 'sometimes|nullable|string|max:50',
             'is_favourite' => 'sometimes|boolean',
         ];
     }

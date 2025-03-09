@@ -5,11 +5,11 @@ use App\Actions\Auth\HandleWebauthnLogin;
 use App\Actions\Groups\ShowFavourites;
 use App\Actions\Settings\GetWebAuthnConfig;
 use App\Actions\Settings\HandleWebAuthnRegistration;
-use App\Actions\Vaults\CreateVault;
+use App\Actions\Vaults\StoreVault;
 use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\GetVaults;
 use App\Actions\Vaults\ShowVault;
-use App\Actions\Vaults\VaultRecords\CreateVaultRecord;
+use App\Actions\Vaults\VaultRecords\StoreVaultRecord;
 use App\Actions\Vaults\VaultRecords\DeleteVaultRecord;
 use App\Actions\Vaults\VaultRecords\GetVaultRecords;
 use App\Actions\Vaults\VaultRecords\ShowVaultRecord;
@@ -29,7 +29,7 @@ Route::middleware('auth:api')->group(function () {
     Route::middleware(AssertPKeyMiddleware::class)->group(function () {
         Route::prefix('vaults')->as('vaults.')->group(function () {
             Route::get('', GetVaults::class)->name('index');
-            Route::post('', CreateVault::class)->name('store');
+            Route::post('', StoreVault::class)->name('store');
 
             Route::prefix('{vault}')->group(function () {
                 Route::get('', ShowVault::class)->name('show');
@@ -37,7 +37,7 @@ Route::middleware('auth:api')->group(function () {
 
                 Route::prefix('records')->as('records.')->group(function () {
                     Route::get('', GetVaultRecords::class)->name('index');
-                    Route::post('', CreateVaultRecord::class)->name('store');
+                    Route::post('', StoreVaultRecord::class)->name('store');
                     Route::get('{record}', ShowVaultRecord::class)->name('show');
                     Route::put('{record}', UpdateVaultRecord::class)->name('update');
                     Route::delete('{record}', DeleteVaultRecord::class)->name('delete');

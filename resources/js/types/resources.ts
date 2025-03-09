@@ -65,6 +65,7 @@ export interface VaultRecordResource extends ModelResource {
 }
 
 export interface VaultRecordValueResource extends ModelResource {
+    name?: string;
     value?: string;
     is_invalid?: boolean;
     sensitive: boolean;
