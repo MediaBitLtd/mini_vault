@@ -20,7 +20,7 @@ class UpdateVaultRecord
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
+            'name' => 'sometimes|nullable|string|max:255',
             'values' => 'sometimes|array',
             'values.*.id' => 'required|exists:vault_record_values,id',
             'values.*.value' => 'sometimes|nullable|string',

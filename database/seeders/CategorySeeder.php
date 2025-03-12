@@ -15,12 +15,28 @@ class CategorySeeder extends Seeder
 
         $categories = collect([
             [
+                'record' => ['slug' => 'custom', 'name' => 'Custom', 'description' => 'Custom empty category. All fields will be added by user', 'icon' => 'pi-shield'],
+                'fields' => [],
+            ],
+            [
                 'record' => ['slug' => 'password', 'name' => 'Simple Password', 'description' => null, 'icon' => 'pi-lock'],
                 'fields' => ['password'],
             ],
             [
                 'record' => ['slug' => 'user_password', 'name' => 'User Login', 'description' => null, 'icon' => 'pi-user'],
                 'fields' => ['username', 'password'],
+            ],
+            [
+                'record' => ['slug' => 'ssh', 'name' => 'SSH', 'description' => null, 'icon' => 'pi-desktop'],
+                'fields' => ['host', 'username', 'public_key', 'private_key', 'note'],
+            ],
+            [
+                'record' => ['slug' => 'key', 'name' => 'Key Pair', 'description' => null, 'icon' => 'pi-key'],
+                'fields' => ['public_key', 'private_key', 'note'],
+            ],
+            [
+                'record' => ['slug' => 'note', 'name' => 'Secure note', 'description' => null, 'icon' => 'pi-file'],
+                'fields' => ['secret_note'],
             ],
             [
                 'record' => ['slug' => 'application', 'name' => 'App Login', 'description' => null, 'icon' => 'pi-mobile'],

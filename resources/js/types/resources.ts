@@ -49,6 +49,7 @@ export interface CategoryResource extends ModelResource {
 export interface FieldResource extends ModelResource {
     slug: string;
     label: string;
+    sensitive: boolean;
     type: string; // TODO change this to enum
 }
 
@@ -68,6 +69,5 @@ export interface VaultRecordValueResource extends ModelResource {
     name?: string;
     value?: string;
     is_invalid?: boolean;
-    sensitive: boolean;
     field?: FieldResource;
 }

@@ -39,7 +39,7 @@
         </header>
         <main class="flex flex-grow max-h-full overflow-hidden bg-white dark:bg-neutral-900 dark:text-white">
             <aside
-                class="hidden sm:flex w-56 lg:w-72 bg-gray-200 border-r border-gray-500 dark:text-white dark:bg-stone-950 dark:border-black"
+                class="hidden sm:flex w-56 lg:w-86 bg-gray-200 border-r border-gray-500 dark:text-white dark:bg-stone-950 dark:border-black"
             >
                 <nav class="flex flex-col w-full pt-10 pb-5 gap-10 overflow-y-auto">
                     <Link href="/" class="flex items-center px-10">
@@ -64,7 +64,7 @@
                     </div>
                 </nav>
             </aside>
-            <article class="flex-grow relative h-[100dvh] pt-[4rem] sm:pt-10 mx-auto sm:mt-0">
+            <article class="w-full relative h-[100dvh] pt-[4rem] sm:pt-10 mx-auto sm:mt-0">
                 <slot />
             </article>
         </main>

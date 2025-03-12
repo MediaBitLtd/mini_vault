@@ -13,7 +13,7 @@
                     @click="copyValue"
                 >
                     <CircularProgress v-model="timerProgression" />
-                    <span class="text-md font-bold whitespace-nowrap">{{ tfaNumber }}</span>
+                    <span class="text-md font-bold whitespace-nowrap" style="user-select:none;">{{ tfaNumber }}</span>
                 </div>
                 <TFASetup
                     v-model="value"
@@ -65,13 +65,18 @@
             v-else-if="props.recordValue.field.type === '2fa' && recordValue.value"
             class="flex gap-2"
             @contextmenu.prevent="menu.show"
-            @click="copyValue"
+            @click="handleClick"
         >
             <CircularProgress v-model="timerProgression" />
-            <span class="text-md font-bold">{{ tfaNumber }}</span>
+            <span class="text-md font-bold" style="user-select:none;">{{ tfaNumber }}</span>
         </div>
-        <span v-else @click="menu.show" @contextmenu.prevent="menu.show" style="user-select:none;">
-            {{ recordValue.field.sensitive ? censured : value || '-' }}
+        <span
+            v-else
+            @click="handleClick"
+            @contextmenu.prevent="menu.show"
+            style="user-select:none;"
+        >
+            {{ recordValue.field.sensitive && !overrideCensor ? censured : value || '-' }}
         </span>
 
         <ContextMenu ref="menu" :model="items" />
@@ -99,6 +104,7 @@ const menu = ref()
 const inputField = ref()
 
 const value = ref<VaultRecordValueResource['value']>(props.recordValue.value ? atob(props.recordValue.value) : null)
+const overrideCensor = ref(false)
 
 const items = computed<MenuItem[]>(() => ([
     {
@@ -118,7 +124,10 @@ const items = computed<MenuItem[]>(() => ([
 const currentTime = ref(0)
 const tfaNumber = ref<string>(null)
 
-const censured = computed(() => !value.value ? '-' : value.value?.split('').map(() => '*').join(''))
+const censured = computed(() => !value.value
+    ? '-'
+    : value.value?.split('').map(() => '*').splice(0, 30).join('')
+)
 const timerProgression = computed(() => currentTime.value / JSON.parse(value.value)?.period * 100)
 const usableValue = computed(() => {
     switch (props.recordValue.field.type) {
@@ -128,6 +137,26 @@ const usableValue = computed(() => {
             return value.value
     }
 })
+
+const handleClick = () => {
+    switch (props.recordValue.field.type) {
+        case 'textarea':
+            if (props.recordValue.field.slug === 'secret_note') {
+                overrideCensor.value = !overrideCensor.value
+            }
+
+            // Don't copy
+            return
+        case '2fa':
+        default:
+            switch(props.recordValue.field.slug) {
+                case 'appname':
+                case 'website':
+                    return
+            }
+            return copyValue()
+    }
+}
 
 const copyValue = async () => {
     const result = await navigator.permissions.query({ name: 'clipboard-write' })
