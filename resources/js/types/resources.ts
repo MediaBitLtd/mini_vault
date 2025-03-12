@@ -47,7 +47,7 @@ export interface CategoryResource extends ModelResource {
 }
 
 export interface FieldResource extends ModelResource {
-    name: string;
+    slug: string;
     label: string;
     type: string; // TODO change this to enum
 }

@@ -54,6 +54,7 @@
                         :record-value="recordValue"
                         :editing
                         @delete="record.values.splice(index, 1)"
+                        @updated="handle2FASetup"
                     />
 
                     <Button v-if="editing" @click="addingNewField = true">Add Field</Button>
@@ -201,6 +202,21 @@ const toggleFavourite = async () => {
         handleAPIError(e)
     } finally {
         savingFavourite.value = false
+    }
+}
+
+const handle2FASetup = ({ issuer, accountName }: {issuer: string, accountName?: string}) => {
+    if (issuer) {
+        const appNameValue = props.record.values.find(value => value.field.slug === 'appname')
+        if (appNameValue) {
+            appNameValue.value = btoa(issuer)
+        }
+    }
+    if (accountName) {
+        const userNameValue = props.record.values.find(value => value.field.slug === 'username')
+        if (userNameValue) {
+            userNameValue.value = btoa(accountName)
+        }
     }
 }
 

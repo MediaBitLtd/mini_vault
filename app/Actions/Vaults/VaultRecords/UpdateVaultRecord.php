@@ -52,7 +52,7 @@ class UpdateVaultRecord
                     $valueModel = $record->values
                         ->where('id', '=', $value['id'])
                         ->firstOrFail();
-                    $valueModel->value = $value['value']
+                    $valueModel->value = $value['value'] ?? false
                         ? base64_decode($value['value'])
                         : null;
                     $valueModel->save();
