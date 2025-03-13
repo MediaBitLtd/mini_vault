@@ -11,7 +11,7 @@
             </div>
         </template>
         <template #content>
-            <ul v-if="records.length" class="space-y-4">
+            <ul class="space-y-4">
                 <li v-for="(record, index) in records">
                     <VaultRecordListItem
                         :vault
@@ -22,8 +22,8 @@
                         @delete="records.splice(index, 1)"
                     />
                 </li>
+                <InfiniteLoader v-model:loading="loadingRecords" :last-page="lastPage" @load="nextPage" />
             </ul>
-            <!--TODO pagination-->
         </template>
         <template #footer>
             <div class="flex gap-3 px-5 py-4 sm:p-0 border-t-2 border-neutral-200 dark:border-stone-700 dark:bg-stone-950">
@@ -51,6 +51,7 @@ import { MenuItem } from 'primevue/menuitem'
 import RecordCreateModal from '~/Components/VaultRecords/RecordCreateModal.vue'
 import { debouce } from '~/utils/debouce'
 import { useDebounce } from '~/Composables/debouce'
+import InfiniteLoader from '~/Components/InfiniteLoader.vue'
 
 const props = defineProps<{
     vault: VaultResource;
@@ -59,7 +60,7 @@ const props = defineProps<{
 }>()
 
 const confirm = useConfirm()
-const { loadVaults, records, loadRecords } = useVaults()
+const { loadVaults, lastLoadedPage, loadingRecords, lastPage, records, loadRecords } = useVaults()
 const debounce = useDebounce();
 
 const search = ref('')
@@ -110,6 +111,17 @@ const applySearch = () => {
     loadRecords(props.vault, {
         q: search.value?.trim() ? search.value : undefined,
         page: 1,
+    });
+}
+
+const nextPage = () => {
+    if (lastPage.value) {
+        return
+    }
+
+    loadRecords(props.vault, {
+        q: search.value?.trim() ? search.value : undefined,
+        page: lastLoadedPage.value + 1,
     });
 }
 

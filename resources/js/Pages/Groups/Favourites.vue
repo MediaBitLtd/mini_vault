@@ -2,7 +2,7 @@
     <PageLayout>
         <template #title>Favourites</template>
         <template #content>
-            <ul v-if="records.length" class="space-y-4">
+            <ul class="space-y-4">
                 <li v-for="(record, index) in records">
                     <VaultRecordListItem
                         :vault="record.vault"
@@ -13,7 +13,7 @@
                     />
                 </li>
             </ul>
-            <!--TODO pagination-->
+            <InfiniteLoader v-model:loading="loadingRecords" :last-page="lastPage" @load="nextPage" />
         </template>
     </PageLayout>
 </template>
@@ -22,12 +22,21 @@ import PageLayout from '~/Layouts/PageLayout.vue'
 import { useVaults } from '~/Composables/vaults'
 import VaultRecordListItem from '~/Components/VaultRecords/VaultRecordListItem.vue'
 import { FieldResource } from '~/types/resources'
+import InfiniteLoader from '~/Components/InfiniteLoader.vue'
 
 const props = defineProps<{
     fields: FieldResource[];
 }>()
 
-const { records, loadFavourites } = useVaults()
+const { records, loadFavourites, loadingRecords, lastPage, lastLoadedPage } = useVaults()
+
+const nextPage = () => {
+    if (lastPage.value) {
+        return
+    }
+
+    loadFavourites({ page: lastLoadedPage.value + 1, q: undefined })
+}
 
 loadFavourites()
 </script>

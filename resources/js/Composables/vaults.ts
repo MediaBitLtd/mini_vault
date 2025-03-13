@@ -88,9 +88,11 @@ export const useVaults = () => {
     return {
         loadFavourites,
         loadingRecords,
+        lastLoadedPage,
         loadingVaults,
         loadRecords,
         loadVaults,
+        lastPage,
         records,
         vaults,
     }

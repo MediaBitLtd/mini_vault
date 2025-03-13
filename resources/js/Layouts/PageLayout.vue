@@ -6,7 +6,7 @@
             </h1>
             <slot name="header" />
         </header>
-        <main class="w-full h-full overflow-y-auto" style="scrollbar-gutter: stable both-edges;">
+        <main id="container" class="w-full h-full overflow-y-auto" style="scrollbar-gutter: stable both-edges;">
             <div class="h-full">
                 <div class="xl:max-w-4xl px-5 mx-auto pb-5">
                     <slot name="content" />
