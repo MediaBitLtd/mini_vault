@@ -36,9 +36,17 @@ class VaultRecordFactory extends Factory
                 $value->value = rand(0, 100) < 80
                     ? match ($value->field->slug) {
                         'website' => $this->faker->url(),
+                        'host' => $this->faker->randomElement([
+                            $this->faker->ipv4(),
+                            $this->faker->ipv6(),
+                            $this->faker->url(),
+                        ]),
                         'password' => $this->faker->password(),
                         'username' => $this->faker->userName(),
                         'note' => $this->faker->realTextBetween(150, 400),
+                        'secret_note' => $this->faker->realTextBetween(150, 400),
+                        'public_key' => $this->faker->text(),
+                        'private_key' => $this->faker->text(),
                         'pin' => str_pad($this->faker->randomNumber($n = rand(4, 6)), $n, '0', STR_PAD_LEFT),
                         '2fa' => json_encode([
                             'period' => 30,
