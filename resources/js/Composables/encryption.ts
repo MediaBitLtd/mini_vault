@@ -1,3 +1,5 @@
+import jsSHA from "jssha";
+
 const bufferToBase64URLString = (buffer: ArrayBuffer): string => {
     // @ts-ignore
     const str = String.fromCharCode(...new Uint8Array(buffer));
@@ -75,6 +77,54 @@ export const useEncryption = () => {
     return {
         bufferToBase64URLString,
         base64URLStringToBuffer,
+        getOTPFromSecret,
         generatePassword,
+    }
+}
+
+// Code extracted from https://jsfiddle.net/russau/ch8PK/ < Thank you!
+
+export const dec2hex = (val: number): string => (val < 15.5 ? '0' : '') + Math.round(val).toString(16)
+export const hex2dec = (val: string): number => parseInt(val, 16)
+
+export const leftpad = (str, len, pad) => len + 1 >= str.length
+    ? Array(len + 1 - str.length).join(pad) + str
+    : str
+
+export const base32tohex = (str) => {
+    const base32chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+    let bits = ''
+    let hex = ''
+
+    for (let i = 0; i < str.length; i++) {
+        const val = base32chars.indexOf(str.charAt(i).toUpperCase())
+        bits += leftpad(val.toString(2), 5, '0')
+    }
+
+    for (let i = 0; i + 4 <= bits.length; i += 4) {
+        const chunk = bits.substr(i, 4)
+        hex = hex + parseInt(chunk, 2).toString(16)
+    }
+
+    return hex
+}
+
+export const getOTPFromSecret = (secret, period = 30) => {
+    try {
+        const time = Math.floor(Math.floor((new Date).getTime() / 1000) / period)
+        const paddedTime = leftpad(dec2hex(time), 16, '0')
+
+        const shaObj = new jsSHA('SHA-1', 'HEX')
+        shaObj.setHMACKey(base32tohex(secret), 'HEX')
+        shaObj.update(paddedTime)
+
+        const hmac = shaObj.getHMAC('HEX')
+
+        const offset = hex2dec(hmac.substring(hmac.length - 1))
+        const otp = (hex2dec(hmac.substring(offset * 2, offset * 2 + 8)) & hex2dec('7fffffff')) + ''
+
+        return otp.substring(otp.length - 6, otp.length)
+    } catch (e) {
+        return ''
     }
 }

@@ -20,7 +20,7 @@ class UpdateVaultRecord
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|string|max:255',
+            'name' => 'sometimes|nullable|string|max:255',
             'values' => 'sometimes|array',
             'values.*.id' => 'required|exists:vault_record_values,id',
             'values.*.value' => 'sometimes|nullable|string',
@@ -52,7 +52,7 @@ class UpdateVaultRecord
                     $valueModel = $record->values
                         ->where('id', '=', $value['id'])
                         ->firstOrFail();
-                    $valueModel->value = $value['value']
+                    $valueModel->value = $value['value'] ?? false
                         ? base64_decode($value['value'])
                         : null;
                     $valueModel->save();

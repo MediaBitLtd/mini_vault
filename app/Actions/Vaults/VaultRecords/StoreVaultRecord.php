@@ -30,8 +30,7 @@ class StoreVaultRecord
         /** @var Vault $vault */
         $vault = $request->route('vault');
 
-        return $request->user()->can('view', $vault) && $vault->isUnlockable &&
-            $request->user()->can('create', VaultRecord::class);
+        return $request->user()->can('view', $vault) && $vault->isUnlockable;
     }
 
     public function handle(Vault $vault, ActionRequest $request): VaultRecord

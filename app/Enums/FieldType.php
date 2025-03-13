@@ -8,4 +8,6 @@ enum FieldType: string
     case PASSWORD = 'password';
     case URL = 'url';
     case TEXTAREA = 'textarea';
+    case PIN = 'pin';
+    case TWO_FA = '2fa';
 }
