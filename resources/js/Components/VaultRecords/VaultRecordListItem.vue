@@ -2,6 +2,7 @@
     <Card ref="panel">
         <template #content>
             <div
+                ref="page"
                 class="overflow-hidden"
                 style="transition: 500ms ease-in-out;"
                 :style="opened ? 'max-height: 800px' : 'max-height: 2.5rem'"
@@ -88,7 +89,7 @@
 <script setup lang="ts">
 import { Dialog, Select, SplitButton, InputText, Button, Card, useConfirm } from 'primevue'
 import { FieldResource, VaultRecordResource, VaultRecordValueResource, VaultResource } from '~/types/resources'
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import RecordValue from '~/Components/VaultRecords/RecordValue.vue'
 import { MenuItem } from 'primevue/menuitem'
 import axios from 'axios'
@@ -108,9 +109,11 @@ const confirm = useConfirm()
 const toast = useToast();
 const { handleAPIError } = useErrorHandler()
 
+const page = ref()
 const panel = ref()
 const opened = ref(false)
 const editing = ref(false)
+const autoCloseDebouce = ref(false)
 const intentsToClose = ref(false)
 const existingValues = ref(undefined)
 const addingNewField = ref(false)
@@ -162,6 +165,18 @@ const saveMenu = computed(() => [
     },
 ] as MenuItem[])
 
+const detectNeedsClosing = () => {
+    const rect = page.value.getBoundingClientRect();
+
+    if (rect.top > 400 && !autoCloseDebouce.value && opened.value && !editing.value) {
+        toggleOpen();
+    }
+}
+
+if (props.record.name === 'Explicabo laudantium.') {
+    opened.value = true
+}
+
 const toggleOpen = () => {
     if (editing.value) {
         intentsToClose.value = true
@@ -172,9 +187,13 @@ const toggleOpen = () => {
     intentsToClose.value = false
 
     if (opened.value) {
+        autoCloseDebouce.value = true
         setTimeout(() => {
             panel.value.$el.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'end' })
         }, 300)
+        setTimeout(() => {
+            autoCloseDebouce.value = false
+        }, 1000)
     }
 }
 
@@ -283,4 +302,12 @@ watch(
         }
     }
 )
+
+onMounted(() => {
+    document.getElementById('container').addEventListener('scroll', detectNeedsClosing);
+    detectNeedsClosing()
+})
+onBeforeUnmount(() => {
+    document.getElementById('container').removeEventListener('scroll', detectNeedsClosing);
+})
 </script>

@@ -2,7 +2,7 @@
     <PageLayout>
         <template #title>{{ vault.name }}</template>
         <template #header>
-            <div class="flex flex-col sm:flex-row gap-2">
+            <div class="flex gap-2">
                 <SearchBar v-model="search" class="flex-1" :disabled="!!editing.length" />
                 <Button class="!px-5" severity="contrast" variant="outlined" @click="menu.toggle($event)">
                     Options <i class="pi pi-cog"></i>
