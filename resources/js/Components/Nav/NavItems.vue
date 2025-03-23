@@ -10,7 +10,7 @@
             </ul>
         </section>
         <section class="my-10">
-            <h3 class="text-xl text-bolder mb-2 text-gray-400 dark:text-sot-500">My Vaults</h3>
+            <h3 class="text-lg text-bolder mb-2 text-gray-400 dark:text-sot-500">Vaults</h3>
             <Loader v-if="loadingVaults" />
             <ul v-else class="flex flex-col gap-1">
                 <li v-for="vault in vaults">

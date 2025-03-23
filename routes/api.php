@@ -2,6 +2,9 @@
 
 use App\Actions\Auth\GetBiometricAuthOptions;
 use App\Actions\Auth\HandleWebauthnLogin;
+use App\Actions\Dashboard\ShowDashboardRecords;
+use App\Actions\Fields\GetCategories;
+use App\Actions\Fields\GetFields;
 use App\Actions\Groups\ShowFavourites;
 use App\Actions\Settings\GetWebAuthnConfig;
 use App\Actions\Settings\HandleWebAuthnRegistration;
@@ -26,6 +29,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth:api')->group(function () {
+    Route::get('categories', GetCategories::class);
+    Route::get('fields', GetFields::class);
+
     Route::middleware(AssertPKeyMiddleware::class)->group(function () {
         Route::prefix('vaults')->as('vaults.')->group(function () {
             Route::get('', GetVaults::class)->name('index');
@@ -50,6 +56,7 @@ Route::middleware('auth:api')->group(function () {
                 });
             });
         });
+        Route::get('dashboard', ShowDashboardRecords::class)->name('dashboard');
         Route::get('favourites', ShowFavourites::class)->name('favourites');
     });
 
