@@ -12,6 +12,9 @@
                         @delete="records.splice(index, 1)"
                     />
                 </li>
+                <li v-if="!records.length && !loadingRecords">
+                    <span class="text-sm text-gray-400">No records</span>
+                </li>
             </ul>
             <InfiniteLoader v-model:loading="loadingRecords" :last-page="lastPage" @load="nextPage" />
         </template>

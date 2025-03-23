@@ -69,7 +69,7 @@ class VaultRecordFactory extends Factory
     {
         return [
             'category_id' => Category::query()->inRandomOrder()->first()->id,
-            'name' => $this->faker->boolean() ? $this->faker->sentence(2) : null,
+            'name' => $this->faker->words(2, true),
             'is_favourite' => rand(0, 100) < 10,
         ];
     }

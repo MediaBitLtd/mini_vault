@@ -1,85 +1,100 @@
 <template>
     <div class="space-y-1 mb-6">
-        <span class="block font-bold text-stone-500">{{ recordValue.name || recordValue.field.label }}</span>
-        <div v-if="editing" class="flex gap-2">
-            <div
-                v-if="props.recordValue.field.type === '2fa'"
-                class="flex items-center w-full gap-2"
-            >
+        <span v-if="!noLabel" class="block font-bold text-stone-500">
+            {{ recordValue.name || recordValue.field.label }}
+        </span>
+        <template v-if="!recordValue.invalid">
+            <div v-if="editing" class="flex gap-2">
                 <div
-                    class="flex gap-2"
-                    v-if="recordValue.value"
-                    @contextmenu.prevent="menu.show"
-                    @click="copyValue"
+                    v-if="props.recordValue.field.type === '2fa'"
+                    class="flex items-center w-full gap-2"
                 >
-                    <CircularProgress v-model="timerProgression" />
-                    <span class="text-md font-bold whitespace-nowrap" style="user-select:none;">{{ tfaNumber }}</span>
+                    <div
+                        class="flex gap-2"
+                        v-if="recordValue.value"
+                        @contextmenu.prevent="menu.show"
+                        @click="copyValue"
+                    >
+                        <CircularProgress v-model="timerProgression" />
+                        <span class="text-md font-bold whitespace-nowrap" style="user-select:none;">{{ tfaNumber }}</span>
+                    </div>
+                    <TFASetup
+                        v-model="value"
+                        @updated="emit('updated', $event)"
+                    />
                 </div>
-                <TFASetup
+                <template v-else-if="props.recordValue.field.type === 'password'">
+                    <Password
+                        ref="inputField"
+                        v-model="value"
+                        class="flex-grow"
+                        autocomplete="off"
+                        medium-regex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                        strong-regex="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}"
+                        toggle-mask
+                        fluid
+                    />
+                    <Button variant="text" severity="secondary" @click="value = generatePassword()" size="small">
+                        <i class="pi pi-sync" />
+                    </Button>
+                </template>
+                <InputNumber
+                    v-else-if="props.recordValue.field.type === 'pin'"
                     v-model="value"
-                    @updated="emit('updated', $event)"
-                />
-            </div>
-            <template v-else-if="props.recordValue.field.type === 'password'">
-                <Password
-                    ref="inputField"
-                    v-model="value"
-                    class="flex-grow"
                     autocomplete="off"
-                    medium-regex="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
-                    strong-regex="^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}"
-                    toggle-mask
+                    :use-grouping="false"
                     fluid
                 />
-                <Button variant="text" severity="secondary" @click="value = generatePassword()" size="small">
-                    <i class="pi pi-sync" />
+                <Textarea
+                    v-else-if="props.recordValue.field.type === 'textarea'"
+                    v-model="value"
+                    variant="filled"
+                    rows="5"
+                    autocomplete="off"
+                    style="resize: none"
+                    fluid
+                />
+                <InputText
+                    v-else
+                    v-model="value"
+                    autocomplete="off"
+                    fluid
+                />
+                <Button severity="danger" variant="text" size="small" @click="deleteField">
+                    <i class="pi pi-trash" />
                 </Button>
-            </template>
-            <InputNumber
-                v-else-if="props.recordValue.field.type === 'pin'"
-                v-model="value"
-                autocomplete="off"
-                :use-grouping="false"
-                fluid
-            />
-            <Textarea
-                v-else-if="props.recordValue.field.type === 'textarea'"
-                v-model="value"
-                variant="filled"
-                rows="5"
-                autocomplete="off"
-                style="resize: none"
-                fluid
-            />
-            <InputText
+            </div>
+            <div
+                v-else-if="props.recordValue.field.type === '2fa' && recordValue.value"
+                class="flex gap-2"
+                @contextmenu.prevent="menu.show"
+                @click="handleClick"
+            >
+                <CircularProgress v-model="timerProgression" />
+                <span class="text-md font-bold" style="user-select:none;">{{ tfaNumber }}</span>
+            </div>
+            <div
                 v-else
-                v-model="value"
-                autocomplete="off"
-                fluid
-            />
-            <Button severity="danger" variant="text" size="small" @click="deleteField">
-                <i class="pi pi-trash" />
-            </Button>
-        </div>
-        <div
-            v-else-if="props.recordValue.field.type === '2fa' && recordValue.value"
-            class="flex gap-2"
-            @contextmenu.prevent="menu.show"
-            @click="handleClick"
-        >
-            <CircularProgress v-model="timerProgression" />
-            <span class="text-md font-bold" style="user-select:none;">{{ tfaNumber }}</span>
-        </div>
-        <span
-            v-else
-            @click="handleClick"
-            @contextmenu.prevent="menu.show"
-            style="user-select:none;"
-        >
-            {{ recordValue.field.sensitive && !overrideCensor ? censured : value || '-' }}
-        </span>
+                class="flex justify-between"
+            >
+            <span
+                class="w-full"
+                style="user-select:none;"
+                @click="handleClick"
+                @contextmenu.prevent="menu.show"
+            >
+                {{ recordValue.field.sensitive && !overrideCensor ? censured : value || '-' }}
+            </span>
+                <button v-if="recordValue.field.sensitive" @click="overrideCensor = !overrideCensor">
+                    <i class="pi" :class="!overrideCensor ? 'pi-eye' : 'pi-eye-slash'" />
+                </button>
+            </div>
 
-        <ContextMenu ref="menu" :model="items" />
+            <ContextMenu ref="menu" :model="items" />
+        </template>
+        <span v-else class="text-red-500">
+            invalid
+        </span>
     </div>
 </template>
 <script setup lang="ts">
@@ -94,6 +109,7 @@ import TFASetup from '~/Components/VaultRecords/TFASetup.vue'
 const props = defineProps<{
     recordValue: VaultRecordValueResource;
     editing?: boolean;
+    noLabel?: boolean;
 }>()
 
 const emit = defineEmits(['update:recordValue', 'delete', 'updated'])
