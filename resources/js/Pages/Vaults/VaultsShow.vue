@@ -40,6 +40,11 @@
         v-model:visible="createVisible"
         @submitted="records.push($event)"
     />
+    <RenameVaultModal
+        :vault
+        v-model:visible="renameVisible"
+        @submitted="updateVault"
+    />
 </template>
 <script setup lang="ts">
 import { CategoryResource, FieldResource, VaultResource } from '~/types/resources'
@@ -52,9 +57,9 @@ import VaultRecordListItem from '~/Components/VaultRecords/VaultRecordListItem.v
 import PageLayout from '~/Layouts/PageLayout.vue'
 import { MenuItem } from 'primevue/menuitem'
 import RecordCreateModal from '~/Components/VaultRecords/RecordCreateModal.vue'
-import { debouce } from '~/utils/debouce'
 import { useDebounce } from '~/Composables/debouce'
 import InfiniteLoader from '~/Components/InfiniteLoader.vue'
+import RenameVaultModal from '~/Components/VaultRecords/RenameVaultModal.vue'
 
 const props = defineProps<{
     vault: VaultResource;
@@ -64,10 +69,11 @@ const props = defineProps<{
 
 const confirm = useConfirm()
 const { loadVaults, lastLoadedPage, loadingRecords, lastPage, records, loadRecords } = useVaults()
-const debounce = useDebounce();
+const debounce = useDebounce()
 
 const search = ref('')
 const createVisible = ref(false)
+const renameVisible = ref(false)
 const editing = ref([])
 
 const menu = ref()
@@ -76,6 +82,11 @@ const items = ref<MenuItem[]>([
         label: 'Create record',
         icon: 'pi pi-plus',
         command: () => addRecord(),
+    },
+    {
+        label: 'Rename vault',
+        icon: 'pi pi-pencil',
+        command: () => renameVisible.value = true,
     },
     {
         label: 'Delete vault',
@@ -115,6 +126,11 @@ const applySearch = () => {
         q: search.value?.trim() ? search.value : undefined,
         page: 1,
     });
+}
+
+const updateVault = ({ name }) => {
+    props.vault.name = name
+    loadVaults()
 }
 
 const nextPage = () => {

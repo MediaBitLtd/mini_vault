@@ -12,6 +12,7 @@ use App\Actions\Vaults\StoreVault;
 use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\GetVaults;
 use App\Actions\Vaults\ShowVault;
+use App\Actions\Vaults\UpdateVault;
 use App\Actions\Vaults\VaultRecords\StoreVaultRecord;
 use App\Actions\Vaults\VaultRecords\DeleteVaultRecord;
 use App\Actions\Vaults\VaultRecords\GetVaultRecords;
@@ -39,6 +40,7 @@ Route::middleware('auth:api')->group(function () {
 
             Route::prefix('{vault}')->group(function () {
                 Route::get('', ShowVault::class)->name('show');
+                Route::put('', UpdateVault::class)->name('update');
                 Route::delete('', DeleteVault::class)->name('destroy');
 
                 Route::prefix('records')->as('records.')->group(function () {
