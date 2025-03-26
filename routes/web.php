@@ -1,5 +1,6 @@
 <?php
 
+use App\Actions\Auth\ChangePassword;
 use App\Actions\Auth\HandleAuthenticationCallback;
 use App\Actions\Auth\HandleLoginSubmission;
 use App\Actions\Auth\ShowLoginPage;
@@ -8,6 +9,7 @@ use App\Actions\Groups\ShowFavourites;
 use App\Actions\Settings\ShowSettingsPage;
 use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\ShowVault;
+use App\Http\Middleware\AssertPKeyMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +24,10 @@ Route::post('auth/verify', function () {
     Auth::guard('web')->login(Auth::guard('api')->user());
     return redirect()->route('dashboard');
 })->middleware('auth:api');
+
+Route::post('auth/change-password', ChangePassword::class)
+    ->middleware(['auth:api', AssertPKeyMiddleware::class])
+    ->name('change-password');
 
 Route::get('auth/callback', HandleAuthenticationCallback::class)->middleware('auth')->name('auth.callback');
 

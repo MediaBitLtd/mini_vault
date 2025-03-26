@@ -15,7 +15,7 @@ class HandleWebauthnLogin
 {
     use AsAction;
 
-    public function handle(ActionRequest $request)
+    public function handle(ActionRequest $request): array
     {
         $requestData = VerifyWebAuthnRequest::make()->handle($request, null, 'webauthn.get');
 
@@ -50,7 +50,7 @@ class HandleWebauthnLogin
     {
         try {
             $data = $this->handle($request);
-        } catch (Exception $e) {
+        } catch (Exception) {
             throw new AuthorizationException;
         }
 

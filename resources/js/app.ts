@@ -16,6 +16,13 @@ import 'vue-toastification/dist/index.css'
 useDarkMode()
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
+axios.interceptors.response.use(res => res, error => {
+    if (error.response?.status === 401) {
+        window.location.href = '/auth/logout';
+    }
+
+    return Promise.reject(error)
+})
 
 createInertiaApp({
     resolve: name => {

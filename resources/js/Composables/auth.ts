@@ -90,6 +90,12 @@ const registerAuthnAuthentication = (key: string) => {
     hasAuthnSetup.value = true;
 }
 
+const resetAuth = () => {
+    localStorage.removeItem('_webauthn')
+    CookieJS.remove('_accessToken')
+    window.location.href = '/auth/logout'
+}
+
 export const useWebAuthn = () => {
     return {
         registerAuthnAuthentication,
@@ -111,6 +117,7 @@ export const useAuth = () => {
     user.value = page.props.auth.user
 
     return {
+        resetAuth,
         user,
     }
 }

@@ -49,6 +49,7 @@ const loadRecords = async (vault: VaultResource, { page, q } = { page: 1, q: und
         lastPage.value = data.meta.page >= data.meta.last_page
     } catch (e) {
         handleAPIError(e)
+        lastPage.value = true // This locks the infinite loader
     } finally {
         loadingRecords.value = false;
     }

@@ -93,6 +93,10 @@ export function useErrorHandler() {
             }
         }
 
+        if (response.status === 401) {
+            window.location.href = '/auth/logout'
+        }
+
         const message = getErrorMessage(response)
 
         if (options.showToast) {
