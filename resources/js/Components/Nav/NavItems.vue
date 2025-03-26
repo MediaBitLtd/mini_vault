@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col justify-between px-8 py-5">
+    <div class="flex flex-col justify-between px-4 lg:px-8 py-5">
         <section>
             <ul class="flex flex-col">
                 <li>
