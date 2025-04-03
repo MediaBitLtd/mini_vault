@@ -13,15 +13,13 @@ class HandleAuthenticationCallback
 {
     use AsAction;
 
-    public function handle(ActionRequest $request): Response
+    public function handle(ActionRequest $request): Response|\Symfony\Component\HttpFoundation\Response
     {
         $state = Session::pull('oauth_state');
 
-        throw_unless(
-            strlen($state) > 0 && $state === $request->get('state'),
-            BadRequestHttpException::class,
-            'Invalid state value.'
-        );
+        if (!(strlen($state) > 0 && $state === $request->get('state'))) {
+            return Inertia::location('/');
+        }
 
         return Inertia::render('Auth/Callback', [
             'code' => $request->get('code'),

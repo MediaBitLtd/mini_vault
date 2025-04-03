@@ -6,6 +6,21 @@ export type PageProps<
     auth: {
         user: UserResource;
     };
-    isLocal: boolean;
+    app: {
+        isLocal: boolean;
+        version: string;
+    }
     csrf_token: string;
 };
+
+export interface NavigatorCredential extends Credential {
+    rawId: ArrayBuffer;
+    getClientExtensionResults: () => unknown;
+    authenticatorAttachment: () => unknown;
+    response: {
+        getPublicKey: () => ArrayBuffer;
+        getAuthenticatorData: () => ArrayBuffer;
+        clientDataJSON: ArrayBuffer;
+        getTransports: () => string[];
+    }
+}

@@ -13,6 +13,8 @@
         "laravel/tinker": "^2.9",
         "lorisleiva/laravel-actions": "^2.8",
         "predis/predis": "^2.0",
+        "spatie/laravel-blink": "^1.7",
+        "spatie/laravel-data": "^4.13",
         "spatie/laravel-permission": "^6.14"
     },
     "require-dev": {
@@ -29,7 +31,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/date.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

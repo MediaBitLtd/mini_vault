@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-orange-50: #fff6f3;
+    --color-orange-100: #ffd2c3;
+    --color-orange-200: #ffaf94;
+    --color-orange-300: #ff8b64;
+    --color-orange-400: #ff6835;
+    --color-orange-500: #ff4405;
+    --color-orange-600: #d93a04;
+    --color-orange-700: #b33004;
+    --color-orange-800: #8c2503;
+    --color-orange-900: #661b02;
+    --color-orange-950: #401101;
+}
+
+button {
+    cursor: pointer;
+}

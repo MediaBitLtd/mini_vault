@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Laravel\Passport\Client;
+use Laravel\Passport\PersonalAccessClient;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,20 +14,49 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(LiveDatabaseSeeder::class);
+
         User::factory()->create([
-            'first_name' => 'Joao',
-            'last_name' => 'Matos',
-            'email' => 'joao.matos@media-bit.co.uk',
+            'first_name' => 'User',
+            'last_name' => 'Test',
+            'email' => 'user@example.com',
         ]);
 
         Client::factory()->create([
             'id' => 1,
             'name' => 'Mini Vault',
             'secret' => '4yPJCzknzdoUs3iHSL4DLwSTSziwFWA6SXKrYghd',
-            'redirect' => 'https://vault.home.cloud/auth/callback',
-            'personal_access_client' => 0,
-            'password_client' => 0,
-            'revoked' => 0,
+            'redirect' => config('app.url') . '/auth/callback',
+            'personal_access_client' => false,
+            'password_client' => false,
+            'revoked' => false,
+            'requires_user_key' => true,
+        ]);
+
+        Client::factory()->create([
+            'id' => 2,
+            'name' => 'Mini Vault NPKey',
+            'secret' => '8tLejTaJdWPKMMIDTvfTfLlFyPmCOdOsipXFAw3t',
+            'redirect' => config('app.url') . '/auth/callback',
+            'personal_access_client' => false,
+            'password_client' => false,
+            'revoked' => false,
+            'requires_user_key' => false,
+        ]);
+
+        Client::factory()->create([
+            'id' => 3,
+            'name' => 'Mini Vault PAC',
+            'secret' => 'JK5uPgcKrpvy4KCGXEIai59qxNCSBvvZ0YfEpyN5',
+            'redirect' => 'http://localhost',
+            'personal_access_client' => true,
+            'password_client' => false,
+            'revoked' => false,
+            'requires_user_key' => true,
+        ]);
+
+        PersonalAccessClient::query()->create([
+            'client_id' => 3,
         ]);
     }
 }
