@@ -69,6 +69,7 @@ const steps = computed(() => ({
 const nextStep = async (force = false) => {
     if (activeStep.value === 'finish') {
         await axios.post('/onboard')
+        localStorage.setItem('onboarded', 'true')
         // force relocation
         window.location.href = '/';
         return
