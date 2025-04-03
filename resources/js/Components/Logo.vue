@@ -7,13 +7,13 @@
         xmlns="http://www.w3.org/2000/svg">
         <g
             id="layer1"
-            transform="matrix(1.5281966,0,0,1.5281966,-39.736032,-38.606136)">
+            transform="matrix(1.50,0,0,1.50,-40,-35)">
             <circle
                 style="fill:none;stroke-width:5.5;stroke-dasharray:none;stroke-opacity:1"
                 id="path1"
-                cx="56.697094"
-                cy="73.090462"
-                r="18.232634" />
+                cx="57"
+                cy="73"
+                r="18.5" />
             <path
                 style="fill:none;stroke-width:5.5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
                 d="m 75.969305,73.210419 35.985465,0.07997"

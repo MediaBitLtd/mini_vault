@@ -6,65 +6,44 @@
    height="150mm"
    viewBox="0 0 150 150"
    version="1.1"
-   id="svg1"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   id="logo"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#505050"
-     bordercolor="#ffffff"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
-     inkscape:pagecheckerboard="1"
-     inkscape:deskcolor="#505050"
-     inkscape:document-units="mm"
-     showguides="true" />
-  <defs
-     id="defs1" />
   <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Layer 2"
-     transform="matrix(1.1207265,0,0,1.1091891,-9.5768143,-6.4498049)">
+     id="layer2">
     <rect
        style="fill:#ff4405;fill-opacity:1;stroke:none;stroke-width:5.5;stroke-dasharray:none;stroke-opacity:1"
        id="rect5"
-       width="149.69952"
-       height="147.94023"
+       width="150"
+       height="150"
+       rx="5"
        x="-0.15993537"
        y="0.47980615"
-       inkscape:label="rect5" />
+    />
   </g>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
      id="layer1"
-     transform="matrix(1.5281966,0,0,1.5281966,-39.736032,-38.606136)">
+     transform="matrix(1.50,0,0,1.50,-40,-35)">
     <circle
        style="fill:none;stroke:#ffffff;stroke-width:5.5;stroke-dasharray:none;stroke-opacity:1"
        id="path1"
-       cx="56.697094"
-       cy="73.090462"
-       r="18.232634" />
+       cx="57"
+       cy="73"
+       r="18.5" />
     <path
        style="fill:none;stroke:#ffffff;stroke-width:5.5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
        d="m 75.969305,73.210419 35.985465,0.07997"
        id="path2"
-       sodipodi:nodetypes="cc" />
+    />
     <path
        style="fill:none;stroke:#ffffff;stroke-width:5.5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
        d="m 111.91478,73.250402 c 0,0.319871 0.08,17.512924 0.08,17.512924"
        id="path5"
-       inkscape:label="path5"
-       sodipodi:nodetypes="cc" />
+    />
     <path
        style="fill:none;stroke:#ffffff;stroke-width:5.5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"
        d="m 95.65431,73.3021 c 0,0.319871 2e-6,17.033118 2e-6,17.033118"
        id="path5-4"
-       inkscape:label="path5-4"
-       sodipodi:nodetypes="cc" />
+    />
   </g>
 </svg>

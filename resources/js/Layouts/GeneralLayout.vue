@@ -9,7 +9,11 @@
                 <nav class="flex justify-between mx-4 w-full">
                     <Link href="/" class="flex items-center">
                         <Logo class="w-10 h-10"/>
-                        <span class="ml-1 mt-1 text-sm font-bold dark:font-extrabold text-gray-500 dark:text-gray-400">MiniVault</span>
+                        <span
+                            class="ml-1 mt-[0.45rem] text-sm font-bold dark:font-extrabold text-gray-500 dark:text-gray-400"
+                        >
+                            MiniVault
+                        </span>
                     </Link>
                     <div class="flex gap-4">
                         <div class="mt-1">
