@@ -8,7 +8,8 @@
             <div class="flex items-center w-full mt-3">
                 <nav class="flex justify-between mx-4 w-full">
                     <Link href="/" class="flex items-center">
-                        <img src="" alt="Logo" class="rounded-xl min-w-5 max-w-24 max-h-10">
+                        <Logo class="w-10 h-10"/>
+                        <span class="ml-1 mt-1 text-sm font-bold dark:font-extrabold text-gray-500 dark:text-gray-400">MiniVault</span>
                     </Link>
                     <div class="flex gap-4">
                         <div class="mt-1">
@@ -80,6 +81,7 @@ import ToggleSwitch from '~/Components/ToggleSwitch.vue'
 import { useDarkMode } from '~/Composables/settings'
 import NavItems from '~/Components/Nav/NavItems.vue'
 import { ConfirmDialog } from 'primevue'
+import Logo from '~/Components/Logo.vue'
 
 const page = usePage()
 const { darkMode } = useDarkMode()

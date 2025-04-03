@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('key');
             $table->string('biometric_key', 64)->nullable();
             $table->string('timezone')->default('Europe/London');
+            $table->boolean('onboard')->default(false);
             $table->timestamps();
         });
 

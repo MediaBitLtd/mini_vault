@@ -35,6 +35,7 @@ export interface UserResource extends ModelResource {
     email: string;
     email_verified_at: DateTime
     timezone: string;
+    onboard: boolean;
 
     role?: string;
     verified?: boolean;

@@ -25,6 +25,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $key
  * @property string|null $biometric_key
  * @property string $timezone
+ * @property bool $onboard
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -57,6 +58,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'key' => 'hashed',
+        'onboard' => 'boolean',
     ];
 
     protected static function boot()
