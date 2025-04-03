@@ -47,8 +47,11 @@
                 class="hidden sm:flex w-56 lg:w-86 bg-gray-200 border-r border-gray-500 dark:text-white dark:bg-stone-950 dark:border-black"
             >
                 <nav class="flex flex-col w-full pt-10 pb-5 gap-10 overflow-y-auto">
-                    <Link href="/" class="flex items-center px-10">
-                        <img src="" alt="Logo" class="rounded-xl min-w-5 max-w-24 max-h-10">
+                    <Link href="/" class="text-center px-10">
+                        <Logo class="inline w-24 h-24"/>
+                        <div class="text-sm font-bold dark:font-extrabold text-gray-500 dark:text-gray-400">
+                            MiniVault
+                        </div>
                     </Link>
                     <div class="flex-grow">
                         <NavItems />
