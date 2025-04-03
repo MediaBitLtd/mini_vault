@@ -1,5 +1,5 @@
 <template>
-    <PageLayout>
+    <PageLayout v-if="!needsOnboarding">
         <template #title>Dashboard</template>
         <template #content>
             <div class="flex flex-col gap-4">
@@ -153,7 +153,7 @@ const loadRecords = async () => {
 }
 
 if (needsOnboarding.value) {
-    router.visit('/onboard')
+    window.location.href = '/onboard'
 }
 
 loadRecords();
