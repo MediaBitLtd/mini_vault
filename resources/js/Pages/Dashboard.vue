@@ -1,5 +1,5 @@
 <template>
-    <PageLayout>
+    <PageLayout v-if="!needsOnboarding">
         <template #title>Dashboard</template>
         <template #content>
             <div class="flex flex-col gap-4">
@@ -82,9 +82,11 @@ import axios from 'axios'
 import SpinnerLoader from '~/Components/SpinnerLoader.vue'
 import { useErrorHandler } from '~/Composables/errors'
 import { useVaults } from '~/Composables/vaults'
+import { useAuth } from '~/Composables/auth'
 
 const { handleAPIError } = useErrorHandler()
 const { loadVaults } = useVaults()
+const { user } = useAuth()
 
 const categories = ref([])
 const tfaRecords = ref([])
@@ -95,6 +97,8 @@ const nameInput = ref()
 const savingNew = ref(false)
 const newVaultName = ref<string | undefined>(undefined)
 const error = ref<string | undefined>(undefined)
+
+const needsOnboarding = computed(() => !user.value.onboard || !localStorage.getItem('onboarded'))
 
 const prepareForm = async () => {
     newVaultName.value = ''
@@ -146,6 +150,10 @@ const loadRecords = async () => {
     categories.value = data.categories
 
     loading.value = false
+}
+
+if (needsOnboarding.value) {
+    window.location.href = '/onboard'
 }
 
 loadRecords();

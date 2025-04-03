@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class StoreVault
 {
@@ -28,13 +29,15 @@ class StoreVault
     /**
      * @throws VaultAlreadySignedException
      */
-    public function handle(ActionRequest $request): Vault
+    public function handle(string $name): Vault
     {
         /** @var User $user */
         $user = Auth::user();
 
         /** @var Vault $vault */
-        $vault = $user->vaults()->create($request->validated());
+        $vault = $user->vaults()->create([
+            'name' => $name
+        ]);
 
         $vault->sign();
         $vault->save();
@@ -52,6 +55,15 @@ class StoreVault
                 $validator->errors()->add('name', 'Vault name already in use.');
             }
         });
+    }
+
+    public function asController(ActionRequest $request): Vault
+    {
+        try {
+            return $this->handle($request->validated('name'));
+        } catch (VaultAlreadySignedException) {
+            throw new BadRequestException;
+        }
     }
 
     public function jsonResponse(Vault $vault): JsonResponse

@@ -5,6 +5,7 @@ use App\Actions\Auth\HandleAuthenticationCallback;
 use App\Actions\Auth\HandleLoginSubmission;
 use App\Actions\Auth\ShowLoginPage;
 use App\Actions\Dashboard\ShowDashboardPage;
+use App\Actions\Dashboard\ShowOnboardPage;
 use App\Actions\Groups\ShowFavourites;
 use App\Actions\Settings\ShowSettingsPage;
 use App\Actions\Vaults\DeleteVault;
@@ -33,6 +34,9 @@ Route::get('auth/callback', HandleAuthenticationCallback::class)->middleware('au
 
 Route::middleware('auth')->group(function () {
     Route::get('/', ShowDashboardPage::class)->name('dashboard');
+
+    Route::get('onboard', ShowOnboardPage::class)->name('onboard');
+//    Route::post('onboard', )->name('onboard.submit');
 
     Route::get('favourites', ShowFavourites::class);
 

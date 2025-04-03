@@ -2,6 +2,9 @@
 
 use App\Actions\Auth\GetBiometricAuthOptions;
 use App\Actions\Auth\HandleWebauthnLogin;
+use App\Actions\Dashboard\OnboardCreateVault;
+use App\Actions\Dashboard\OnboardSetPassword;
+use App\Actions\Dashboard\OnboardSubmit;
 use App\Actions\Dashboard\ShowDashboardRecords;
 use App\Actions\Fields\GetCategories;
 use App\Actions\Fields\GetFields;
@@ -34,6 +37,12 @@ Route::middleware('auth:api')->group(function () {
     Route::get('fields', GetFields::class);
 
     Route::middleware(AssertPKeyMiddleware::class)->group(function () {
+        Route::prefix('onboard')->group(function () {
+            Route::post('', OnboardSubmit::class);
+            Route::post('password', OnboardSetPassword::class);
+            Route::post('vault', OnboardCreateVault::class);
+        });
+
         Route::prefix('vaults')->as('vaults.')->group(function () {
             Route::get('', GetVaults::class)->name('index');
             Route::post('', StoreVault::class)->name('store');

@@ -43,50 +43,20 @@ class ChangePassword
             throw new RuntimeException('Problem trying to reset your password. Please try again later');
         }
 
-        DB::transaction(fn () => $this->process($user, $request));
-    }
+        DB::transaction(function () use($user, $request) {
+            MigrateVaults::make()->handle($user, $request->get('password'));
 
-    protected function process(User $user, ActionRequest $request): void
-    {
-        $user->load('vaults.records.values');
+            // Remove all authorizations (webauth)
+            Authorization::query()
+                ->where('user_id', '=', $user->id)
+                ->delete();
 
-        $pkey = blink()->get('pkey');
-
-        $user->key = Hash::make(Str::random(40));
-        $user->password = Hash::make($request->get('password'));
-        $user->save();
-
-        $newPKey = $user->getPKey($request->get('password'));
-
-        foreach ($user->vaults as $vault) {
-            blink()->put('pkey', $pkey);
-            $encrypter = $vault->getEncrypter();
-
-            blink()->put('pkey', $newPKey);
-            $newEncrypter = $vault->getEncrypter();
-
-            /** @var VaultRecordValue $value */
-            foreach ($vault->records->pluck('values')->flatten() as $value) {
-                $valueData = $encrypter->decrypt($value->getRawOriginal('value'));
-                $value->setRawAttributes([
-                    'value' => $newEncrypter->encrypt($valueData),
+            // Revoke all tokens
+            Token::query()
+                ->where('user_id', '=', $user->id)
+                ->update([
+                    'revoked' => true,
                 ]);
-                $value->save();
-            }
-
-            $vault->sign(true);
-            $vault->save();
-        }
-
-        // Remove all authorizations (webauth)
-        Authorization::query()
-            ->where('user_id', '=', $user->id)
-            ->delete();
-
-        Token::query()
-            ->where('user_id', '=', $user->id)
-            ->update([
-                'revoked' => true,
-            ]);
+        });
     }
 }

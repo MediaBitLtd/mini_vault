@@ -17,6 +17,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'email_verified_at' => datetime($this->email_verified_at),
             'timezone' => $this->timezone,
+            'onboard' => $this->onboard,
         ];
     }
 }
