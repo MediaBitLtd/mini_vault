@@ -11,6 +11,7 @@ use App\Actions\Settings\ShowSettingsPage;
 use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\ShowVault;
 use App\Http\Middleware\AssertPKeyMiddleware;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -54,4 +55,35 @@ Route::get('.well-known/webauthn', function () {
             config('app.url'),
         ],
     ]);
+});
+
+Route::get('/manifest.json', function () {
+    $name = match (App::environment()) {
+        'local' => 'MiniVault (local)',
+        'staging' => 'MiniVault (staging)',
+        'production' => 'MiniVault',
+    };
+
+    return [
+        'short_name' => $name,
+        'name' => $name,
+        'id' => '/?source=pwa',
+        'start_url' => '/?source=pwa',
+        'display' => 'standalone',
+        'icons' => [
+            [
+                'src' => '/img/logo.svg',
+                'type' => 'image/svg+xml',
+                'sizes' => '512x512',
+            ],
+        ],
+        'scope' => '/',
+        'background_color' => '#0c0a09',
+        'theme_color' => '#0c0a09',
+        'description' => 'MiniVault Project',
+        'categories' => [
+            'productivity',
+            'utilities',
+        ],
+    ];
 });
