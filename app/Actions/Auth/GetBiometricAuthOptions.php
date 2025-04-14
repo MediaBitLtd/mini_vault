@@ -34,7 +34,7 @@ class GetBiometricAuthOptions
 
         Cache::put("webauthn.auth:$user->id", [
             'challenge' => $challenge = Str::random(40),
-            'pkey' => $request->get('pKey'),
+            'pkey' => decrypt($request->get('cypher')),
         ], 120);
 
         return [

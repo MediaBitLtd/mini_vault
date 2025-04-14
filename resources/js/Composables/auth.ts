@@ -27,13 +27,13 @@ const getAuthnAuthConfiguration = async () => {
         return null
     }
 
-    const { userId, userKey, pKey } = JSON.parse(atob(webauthn))
+    const { userId, userKey, cypher } = JSON.parse(atob(webauthn))
 
     try {
         const { data } = await (getGuestAxios()).post('/webauthn/get-auth-options', {
             userId,
             userKey,
-            pKey,
+            cypher,
         })
 
         return data
@@ -85,7 +85,7 @@ const registerAuthnAuthentication = (key: string) => {
     localStorage.setItem('_webauthn', btoa(JSON.stringify({
         userId: jwt.sub,
         userKey: key,
-        pKey: jwt.pkey,
+        cypher: jwt.cypher,
     })))
     hasAuthnSetup.value = true;
 }

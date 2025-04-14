@@ -18,7 +18,8 @@ class PKeyCollectMiddleware
 
         $token = Str::replace('Bearer ', '', $header);
         $data = json_decode(base64_decode(explode('.', $token)[1] ?? ''), true);
-        blink()->put('pkey', $data['pkey'] ?? null);
+
+        blink()->put('pkey', decrypt($data['cypher']) ?? null);
 
         return $next($request);
     }
