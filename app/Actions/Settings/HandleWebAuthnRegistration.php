@@ -41,7 +41,7 @@ class HandleWebAuthnRegistration
         $user->authorizations()->create([
             'authn_id' => $registerData['uid'],
             'credential_id' => $requestData->id,
-            'public_key' => encrypt($requestData->publicKey),
+            'public_key' => $requestData->publicKey,
             'counter' => $requestData->authenticatorData->signCount,
         ]);
 
