@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\Client;
 use Laravel\Passport\PersonalAccessClient;
 
@@ -17,9 +18,11 @@ class DatabaseSeeder extends Seeder
         $this->call(LiveDatabaseSeeder::class);
 
         User::factory()->create([
-            'first_name' => 'User',
-            'last_name' => 'Test',
-            'email' => 'user@example.com',
+            'first_name' => 'Admin',
+            'last_name' => 'User',
+            'email' => 'admin@example.com',
+            'is_admin' => true,
+            'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
         ]);
 
         Client::factory()->create([
