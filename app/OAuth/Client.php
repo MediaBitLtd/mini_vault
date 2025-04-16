@@ -11,6 +11,8 @@ use Laravel\Passport\Client as BaseClient;
  */
 class Client extends BaseClient
 {
+    protected $hidden = [];
+
     public function skipsAuthorization(): bool
     {
         return Str::contains($this->redirect, Config::get('app.url'));
