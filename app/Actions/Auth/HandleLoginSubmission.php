@@ -5,6 +5,7 @@ namespace App\Actions\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -28,6 +29,7 @@ class HandleLoginSubmission
             /** @var User $user */
             $user = Auth::user();
 
+            Session::pull('oauth_redirect');
             Cache::put(
                 "oauth.pkey:$user->id",
                 $user->getPKey($request->get('password')),
