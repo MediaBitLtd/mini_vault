@@ -11,7 +11,7 @@ export default defineConfig({
         basicSsl(),
         vue(),
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.ts'],
+            input: ['resources/css/app.css', 'resources/js/app.ts', 'resources/js/passport.ts'],
             refresh: true,
         }),
     ],
