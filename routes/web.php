@@ -4,6 +4,7 @@ use App\Actions\Auth\ChangePassword;
 use App\Actions\Auth\HandleAuthenticationCallback;
 use App\Actions\Auth\HandleLoginSubmission;
 use App\Actions\Auth\ShowLoginPage;
+use App\Actions\Dashboard\OnboardSubmit;
 use App\Actions\Dashboard\ShowDashboardPage;
 use App\Actions\Dashboard\ShowOnboardPage;
 use App\Actions\Groups\ShowFavourites;
@@ -11,6 +12,7 @@ use App\Actions\Settings\ShowSettingsPage;
 use App\Actions\Vaults\DeleteVault;
 use App\Actions\Vaults\ShowVault;
 use App\Http\Middleware\AssertPKeyMiddleware;
+use App\Http\Middleware\RedirectAdminsMiddleware;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -33,11 +35,10 @@ Route::post('auth/change-password', ChangePassword::class)
 
 Route::get('auth/callback', HandleAuthenticationCallback::class)->middleware('auth')->name('auth.callback');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', RedirectAdminsMiddleware::class])->group(function () {
     Route::get('/', ShowDashboardPage::class)->name('dashboard');
 
     Route::get('onboard', ShowOnboardPage::class)->name('onboard');
-//    Route::post('onboard', )->name('onboard.submit');
 
     Route::get('favourites', ShowFavourites::class);
 

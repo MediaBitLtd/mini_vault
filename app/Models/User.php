@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-//use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Carbon;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasName;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +28,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $biometric_key
  * @property string $timezone
  * @property bool $onboard
+ * @property bool $is_admin
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -34,7 +37,7 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @property-read string $fullName
  */
-class User extends Authenticatable
+class User extends Authenticatable implements HasName, FilamentUser
 {
     use HasApiTokens;
     use HasFactory;
@@ -73,6 +76,16 @@ class User extends Authenticatable
     public function getPKey(string $password): string
     {
         return hash('sha256', "$password:$this->key");
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->first_name;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->is_admin;
     }
 
     // Relationships

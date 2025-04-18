@@ -25,6 +25,9 @@ use App\Actions\Vaults\VaultRecords\VaultRecordValues\ShowVaultRecordValue;
 use App\Actions\Vaults\VaultRecords\VaultRecordValues\StoreVaultRecordValue;
 use App\Actions\Vaults\VaultRecords\VaultRecordValues\UpdateVaultRecordValue;
 use App\Http\Middleware\AssertPKeyMiddleware;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -33,6 +36,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth:api')->group(function () {
+    Route::get('user', function () {
+        JsonResource::withoutWrapping();
+
+        return UserResource::make(Auth::user());
+    });
     Route::get('categories', GetCategories::class);
     Route::get('fields', GetFields::class);
 
