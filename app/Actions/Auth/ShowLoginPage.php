@@ -15,7 +15,18 @@ class ShowLoginPage
 
     public function handle(): Response|RedirectResponse
     {
-        if (!Session::has('oauth_state')) {
+        if (str_starts_with(request()->session()->get('url.intended') ?? '', url('/oauth/authorize'))) {
+            $data = parse_url(request()->session()->get('url.intended'));
+            $queryData = [];
+            parse_str($data['query'], $queryData);
+
+            if (!str_starts_with($queryData['redirect_uri'] ?? '', url(''))) {
+                $intendedUrl = request()->session()->get('url.intended');
+                Session::put('oauth_redirect', $intendedUrl);
+            }
+        }
+
+        if (!Session::has('oauth_state') && !Session::has('oauth_redirect')) {
             Session::put('oauth_state', $state = Str::random(40));
 
             $query = http_build_query([
