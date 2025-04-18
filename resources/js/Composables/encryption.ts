@@ -1,9 +1,9 @@
 import jsSHA from "jssha";
 
-const bufferToBase64URLString = (buffer: ArrayBuffer): string => {
+const bufferToBase64URLString = (buffer: ArrayBuffer, basic = false): string => {
     // @ts-ignore
     const str = String.fromCharCode(...new Uint8Array(buffer));
-    return btoa(str)
+    return basic ? btoa(str) : btoa(str)
         .replaceAll('+', '-')
         .replaceAll('/', '_')
         .replace('=', '')

@@ -36,7 +36,7 @@ class AccessToken extends PassportAccessToken
 
             throw_if(!$pkey);
 
-            return $builder->withClaim('pkey', $pkey)
+            return $builder->withClaim('cypher', encrypt($pkey))
                 ->getToken($this->jwtConfiguration->signer(), $this->jwtConfiguration->signingKey());
         }
 
