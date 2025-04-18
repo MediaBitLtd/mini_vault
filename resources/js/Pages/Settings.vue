@@ -131,7 +131,7 @@ const setupBiometrics = async () => {
             response: {
                 authenticatorData: bufferToBase64URLString(response.getAuthenticatorData()),
                 clientDataJSON: bufferToBase64URLString(response.clientDataJSON),
-                publicKey: bufferToBase64URLString(response.getPublicKey()),
+                publicKey: bufferToBase64URLString(response.getPublicKey(), true),
                 transports: response.getTransports(),
             },
         })

@@ -62,10 +62,18 @@ class HandleWebauthnLogin
         array $data,
     ): bool {
         $signature = $data['signature'];
-        $clientData = $data['clientDataJSON'];
+        $clientData = base64_decode($data['clientDataJSON']);
         $authenticatorData = $data['authenticatorData'];
 
-        // TODO !important
+        $hashData = $authenticatorData.hash('sha256', $clientData, true);
+
+        $pubKey = "-----BEGIN PUBLIC KEY-----\n$publicKey\n-----END PUBLIC KEY-----";
+
+        try {
+            openssl_verify($hashData, $signature, $pubKey, OPENSSL_ALGO_SHA256);
+        } catch (Exception) {
+            return false;
+        }
 
         return true;
     }
