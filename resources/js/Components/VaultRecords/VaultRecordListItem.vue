@@ -94,6 +94,27 @@
             <Button size="small" fluid :loading="savingNewField" @click="addField" >Add</Button>
         </div>
     </Dialog>
+    <Dialog
+        v-model:visible="movingRecord"
+        modal
+        header="Move Record"
+        :style="{ width: '25rem' }"
+    >
+        <div class="flex flex-col gap-4">
+            <p class="text-sm">Any changes will be saved before moving the record</p>
+            <Select
+                v-model="moveToVault"
+                :options="vaults"
+                :loading="saving"
+                option-label="name"
+                option-value="id"
+                placeholder="Choose vault"
+                required
+                fluid
+            />
+            <Button size="small" fluid :loading="saving" @click="moveRecord">Move</Button>
+        </div>
+    </Dialog>
 </template>
 <script setup lang="ts">
 import { Dialog, Select, SplitButton, InputText, Button, Card, useConfirm } from 'primevue'
@@ -105,6 +126,7 @@ import axios from 'axios'
 import SpinnerLoader from '~/Components/SpinnerLoader.vue'
 import { useErrorHandler } from '~/Composables/errors'
 import { useToast } from 'vue-toastification'
+import { useVaults } from '~/Composables/vaults'
 
 const props = defineProps<{
     vault: VaultResource,
@@ -117,11 +139,14 @@ const emit = defineEmits(['delete', 'editing'])
 const confirm = useConfirm()
 const toast = useToast();
 const { handleAPIError } = useErrorHandler()
+const { vaults } = useVaults()
 
 const page = ref()
 const panel = ref()
 const opened = ref(false)
 const editing = ref(false)
+const movingRecord = ref(false)
+const moveToVault = ref(undefined)
 const autoCloseDebouce = ref(false)
 const intentsToClose = ref(false)
 const existingValues = ref(undefined)
@@ -136,6 +161,11 @@ const savingFavourite = ref(false)
 const title = computed(() => props.record.name || props.record.category.name)
 
 const saveMenu = computed(() => [
+    {
+        label: 'Move To',
+        icon: 'pi pi-file-export',
+        command: () => movingRecord.value = true,
+    },
     {
         label: 'Delete',
         icon: 'pi pi-trash',
@@ -282,6 +312,35 @@ const saveRecord = async () => {
         editing.value = false
         intentsToClose.value = false
         toast.success('Record updated')
+    } catch (e) {
+        handleAPIError(e)
+    } finally {
+        saving.value = false
+    }
+}
+
+const moveRecord = async () => {
+    if (!moveToVault.value) {
+        toast.warning('Select vault to move')
+        return
+    }
+
+    const newVault = vaults.value.find(v => v.id === moveToVault.value)
+
+    if (newVault.id === props.vault.id) {
+        toast.warning('Please select a new vault to move the record')
+        return
+    }
+
+    saving.value = true
+    try {
+        const { data } = await axios.put<VaultRecordResource>(`/vaults/${ props.vault.id }/records/${ props.record.id }?include_values=true`, {
+            name: props.record.name,
+            values: props.record.values,
+            vault_id: newVault.id,
+        })
+        emit('delete')
+        toast.success(`Record moved to ${newVault.name}`)
     } catch (e) {
         handleAPIError(e)
     } finally {

@@ -24,6 +24,7 @@ class UpdateVaultRecord
             'values' => 'sometimes|array',
             'values.*.id' => 'required|exists:vault_record_values,id',
             'values.*.value' => 'sometimes|nullable|string',
+            'vault_id' => 'sometimes|exists:vaults,id',
             'is_favourite' => 'sometimes|boolean',
         ];
     }
@@ -43,6 +44,9 @@ class UpdateVaultRecord
     {
         return DB::transaction(function () use($record, $request) : VaultRecord {
             $input = $request->validated();
+            $newVaultId = $input['vault_id'] ?? null;
+
+            unset($input['vault_id']);
 
             if (isset($input['values'])) {
                 $record->load('values');
@@ -67,6 +71,10 @@ class UpdateVaultRecord
             }
 
             $record->update($input);
+
+            if ($newVaultId) {
+                $record = MoveRecordToVault::make()->handle($record, $newVaultId);
+            }
 
             return $record;
         });
