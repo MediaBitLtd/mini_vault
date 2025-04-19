@@ -4,8 +4,8 @@
             <div
                 ref="page"
                 class="overflow-hidden"
-                style="transition: 650ms ease-in-out;"
-                :style="opened ? 'max-height: 3000px' : 'max-height: 2.5rem'"
+                style="transition: 500ms ease-in-out;"
+                :style="opened ? 'max-height: 1600px' : 'max-height: 2.5rem'"
             >
                 <div class="flex justify-between items-center w-full">
                     <button class="flex-grow flex items-center gap-3 h-10" @click="toggleOpen">
@@ -312,6 +312,10 @@ watch(
 onMounted(() => {
     document.getElementById('container').addEventListener('scroll', detectNeedsClosing);
     detectNeedsClosing()
+    if (props.record._new) {
+        startEditing()
+        props.record._new = undefined
+    }
 })
 onBeforeUnmount(() => {
     document.getElementById('container').removeEventListener('scroll', detectNeedsClosing);
