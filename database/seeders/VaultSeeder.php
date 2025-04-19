@@ -21,7 +21,7 @@ class VaultSeeder extends Seeder
     public function run(): void
     {
         /** @var User $user */
-        $user = User::query()->inRandomOrder()->firstOrFail();
+        $user = User::query()->where('is_admin', '=', false)->inRandomOrder()->firstOrFail();
 
         if (!Hash::check('password', $user->password)) {
             throw new Exception('Picked a random user that doesn\'t have the right password');

@@ -5,14 +5,15 @@
                 ref="page"
                 class="overflow-hidden"
                 style="transition: 500ms ease-in-out;"
-                :style="opened ? 'max-height: 800px' : 'max-height: 2.5rem'"
+                :style="opened ? 'max-height: 1600px' : 'max-height: 2.5rem'"
             >
                 <div class="flex justify-between items-center w-full">
                     <button class="flex-grow flex items-center gap-3 h-10" @click="toggleOpen">
                         <i :class="`pi ${record.category.icon}`"></i>
-                        <span class="text-ellipsis overflow-hidden">
+                        <span v-if="!editing" class="text-ellipsis overflow-hidden">
                             {{ record.name || `(${ record.category.name })` }}
                         </span>
+                        <InputText v-else v-model="record.name" fluid/>
                     </button>
 
                     <div class="flex items-center">
@@ -48,7 +49,7 @@
                         </SplitButton>
                     </div>
                 </div>
-                <div class="min-h-[50dvh] relative">
+                <div class=" relative">
                     <RecordValue
                         v-for="(recordValue, index) in record.values"
                         :key="recordValue.id"
@@ -58,7 +59,15 @@
                         @updated="handle2FASetup"
                     />
 
-                    <Button v-if="editing" @click="addingNewField = true">Add Field</Button>
+                    <div v-if="!record.values.length" class="flex flex-col pt-8 gap-4 items-center justify-center">
+                        <div class="text-center space-y-2">
+                            <i class="pi pi-times-circle" style="font-size: 2.5rem" />
+                            <p>Record has no fields yet.</p>
+                        </div>
+                        <Button @click="addingNewField = true; editing = true">Add Field</Button>
+                    </div>
+
+                    <Button v-else-if="editing" @click="addingNewField = true">Add Field</Button>
                 </div>
             </div>
         </template>
@@ -85,6 +94,27 @@
             <Button size="small" fluid :loading="savingNewField" @click="addField" >Add</Button>
         </div>
     </Dialog>
+    <Dialog
+        v-model:visible="movingRecord"
+        modal
+        header="Move Record"
+        :style="{ width: '25rem' }"
+    >
+        <div class="flex flex-col gap-4">
+            <p class="text-sm">Any changes will be saved before moving the record</p>
+            <Select
+                v-model="moveToVault"
+                :options="vaults"
+                :loading="saving"
+                option-label="name"
+                option-value="id"
+                placeholder="Choose vault"
+                required
+                fluid
+            />
+            <Button size="small" fluid :loading="saving" @click="moveRecord">Move</Button>
+        </div>
+    </Dialog>
 </template>
 <script setup lang="ts">
 import { Dialog, Select, SplitButton, InputText, Button, Card, useConfirm } from 'primevue'
@@ -96,6 +126,7 @@ import axios from 'axios'
 import SpinnerLoader from '~/Components/SpinnerLoader.vue'
 import { useErrorHandler } from '~/Composables/errors'
 import { useToast } from 'vue-toastification'
+import { useVaults } from '~/Composables/vaults'
 
 const props = defineProps<{
     vault: VaultResource,
@@ -108,11 +139,14 @@ const emit = defineEmits(['delete', 'editing'])
 const confirm = useConfirm()
 const toast = useToast();
 const { handleAPIError } = useErrorHandler()
+const { vaults } = useVaults()
 
 const page = ref()
 const panel = ref()
 const opened = ref(false)
 const editing = ref(false)
+const movingRecord = ref(false)
+const moveToVault = ref(undefined)
 const autoCloseDebouce = ref(false)
 const intentsToClose = ref(false)
 const existingValues = ref(undefined)
@@ -128,8 +162,9 @@ const title = computed(() => props.record.name || props.record.category.name)
 
 const saveMenu = computed(() => [
     {
-        label: 'Archive',
-        icon: 'pi pi-tags',
+        label: 'Move To',
+        icon: 'pi pi-file-export',
+        command: () => movingRecord.value = true,
     },
     {
         label: 'Delete',
@@ -168,7 +203,9 @@ const saveMenu = computed(() => [
 const detectNeedsClosing = () => {
     const rect = page.value.getBoundingClientRect();
 
-    if (rect.top > 400 && !autoCloseDebouce.value && opened.value && !editing.value) {
+    const trigger = window.innerHeight / 2 + 50
+
+    if (rect.top > trigger && !autoCloseDebouce.value && opened.value && !editing.value) {
         toggleOpen();
     }
 }
@@ -282,6 +319,35 @@ const saveRecord = async () => {
     }
 }
 
+const moveRecord = async () => {
+    if (!moveToVault.value) {
+        toast.warning('Select vault to move')
+        return
+    }
+
+    const newVault = vaults.value.find(v => v.id === moveToVault.value)
+
+    if (newVault.id === props.vault.id) {
+        toast.warning('Please select a new vault to move the record')
+        return
+    }
+
+    saving.value = true
+    try {
+        const { data } = await axios.put<VaultRecordResource>(`/vaults/${ props.vault.id }/records/${ props.record.id }?include_values=true`, {
+            name: props.record.name,
+            values: props.record.values,
+            vault_id: newVault.id,
+        })
+        emit('delete')
+        toast.success(`Record moved to ${newVault.name}`)
+    } catch (e) {
+        handleAPIError(e)
+    } finally {
+        saving.value = false
+    }
+}
+
 const revertChanges = () => {
     props.record.values = JSON.parse(JSON.stringify(existingValues.value))
     editing.value = false
@@ -306,6 +372,10 @@ watch(
 onMounted(() => {
     document.getElementById('container').addEventListener('scroll', detectNeedsClosing);
     detectNeedsClosing()
+    if (props.record._new) {
+        startEditing()
+        props.record._new = undefined
+    }
 })
 onBeforeUnmount(() => {
     document.getElementById('container').removeEventListener('scroll', detectNeedsClosing);
