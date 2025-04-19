@@ -19,7 +19,7 @@
                         :key="record.id"
                         :fields
                         @editing="$event ? editing.push(true) : editing.pop()"
-                        @delete="records.splice(index, 1)"
+                        @delete="records.splice(index, 1); editing.pop()"
                     />
                 </li>
                 <li v-if="!records.length && !loadingRecords">
