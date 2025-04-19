@@ -38,7 +38,7 @@
         :vault
         :categories
         v-model:visible="createVisible"
-        @submitted="records.push($event)"
+        @submitted="records.unshift({...$event, _new: true})"
     />
     <RenameVaultModal
         :vault
