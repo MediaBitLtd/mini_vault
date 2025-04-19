@@ -4,8 +4,8 @@
             <div
                 ref="page"
                 class="overflow-hidden"
-                style="transition: 500ms ease-in-out;"
-                :style="opened ? 'max-height: 800px' : 'max-height: 2.5rem'"
+                style="transition: 650ms ease-in-out;"
+                :style="opened ? 'max-height: 3000px' : 'max-height: 2.5rem'"
             >
                 <div class="flex justify-between items-center w-full">
                     <button class="flex-grow flex items-center gap-3 h-10" @click="toggleOpen">
@@ -48,7 +48,7 @@
                         </SplitButton>
                     </div>
                 </div>
-                <div class="min-h-[50dvh] relative">
+                <div class=" relative">
                     <RecordValue
                         v-for="(recordValue, index) in record.values"
                         :key="recordValue.id"
@@ -58,7 +58,15 @@
                         @updated="handle2FASetup"
                     />
 
-                    <Button v-if="editing" @click="addingNewField = true">Add Field</Button>
+                    <div v-if="!record.values.length" class="flex flex-col pt-8 gap-4 items-center justify-center">
+                        <div class="text-center space-y-2">
+                            <i class="pi pi-times-circle" style="font-size: 2.5rem" />
+                            <p>Record has no fields yet.</p>
+                        </div>
+                        <Button @click="addingNewField = true; editing = true">Add Field</Button>
+                    </div>
+
+                    <Button v-else-if="editing" @click="addingNewField = true">Add Field</Button>
                 </div>
             </div>
         </template>
@@ -128,10 +136,6 @@ const title = computed(() => props.record.name || props.record.category.name)
 
 const saveMenu = computed(() => [
     {
-        label: 'Archive',
-        icon: 'pi pi-tags',
-    },
-    {
         label: 'Delete',
         icon: 'pi pi-trash',
         command: () => {
@@ -168,7 +172,9 @@ const saveMenu = computed(() => [
 const detectNeedsClosing = () => {
     const rect = page.value.getBoundingClientRect();
 
-    if (rect.top > 400 && !autoCloseDebouce.value && opened.value && !editing.value) {
+    const trigger = window.innerHeight / 2 + 50
+
+    if (rect.top > trigger && !autoCloseDebouce.value && opened.value && !editing.value) {
         toggleOpen();
     }
 }
