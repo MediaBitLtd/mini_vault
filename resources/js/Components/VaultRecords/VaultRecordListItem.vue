@@ -10,9 +10,10 @@
                 <div class="flex justify-between items-center w-full">
                     <button class="flex-grow flex items-center gap-3 h-10" @click="toggleOpen">
                         <i :class="`pi ${record.category.icon}`"></i>
-                        <span class="text-ellipsis overflow-hidden">
+                        <span v-if="!editing" class="text-ellipsis overflow-hidden">
                             {{ record.name || `(${ record.category.name })` }}
                         </span>
+                        <InputText v-else v-model="record.name" fluid/>
                     </button>
 
                     <div class="flex items-center">
