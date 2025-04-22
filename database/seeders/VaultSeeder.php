@@ -36,7 +36,7 @@ class VaultSeeder extends Seeder
             $vault->sign();
             $vault->save();
 
-            VaultRecord::factory()->for($vault)->count(rand(50, 100))->create();
+            VaultRecord::factory()->for($vault)->someWithTags()->count(rand(50, 100))->create();
         });
     }
 }

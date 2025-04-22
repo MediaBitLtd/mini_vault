@@ -36,6 +36,7 @@ class GetVaultRecords
         return $vault->records()
             ->when($request->has('q'), fn ($q) => $q
                 ->where('name', 'like', "%{$request->get('q')}%")
+                ->orWhereRelation('tags', 'name', 'like', "%{$request->get('q')}%")
             )
             ->with(['values.field', 'category'])
             ->paginate();
