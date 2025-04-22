@@ -69,7 +69,6 @@ export interface VaultRecordResource extends ModelResource {
 
 export interface VaultRecordTag extends ModelResource {
     name: string;
-    loading?: boolean;
 }
 
 export interface VaultRecordValueResource extends ModelResource {
