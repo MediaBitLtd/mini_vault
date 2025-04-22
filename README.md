@@ -4,7 +4,7 @@
 ---
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/MediaBitLtd/mini_vault/refs/heads/main/public/img/logo.svg?sanitize=true"/>
+<img src="https://raw.githubusercontent.com/MediaBitLtd/mini_vault/refs/heads/main/public/img/logo.svg?sanitize=true" width="256" height="256" />
 <br />
 <br />
 <img alt="license" src="https://img.shields.io/github/license/MediaBitLtd/mini_vault" />
