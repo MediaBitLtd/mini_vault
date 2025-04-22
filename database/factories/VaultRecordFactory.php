@@ -62,21 +62,37 @@ class VaultRecordFactory extends Factory
 
                 $value->save();
             }
-
-            if (rand(0, 100) < 30) {
-                VaultRecordTag::factory()->count(rand(1, 3))->create([
-                    'vault_record_id' => $record->id,
-                ]);
-            }
         });
     }
 
     public function definition(): array
     {
         return [
-            'category_id' => Category::query()->inRandomOrder()->first()->id,
+            'category_id' => Category::query()->count() > 10
+                ? Category::query()->inRandomOrder()->first()->id
+                : Category::factory(),
             'name' => $this->faker->words(2, true),
             'is_favourite' => rand(0, 100) < 10,
         ];
+    }
+
+    public function withTags(): self
+    {
+        return $this->afterCreating(function ($record) {
+            VaultRecordTag::factory()->count(rand(1, 3))->create([
+                'vault_record_id' => $record->id,
+            ]);
+        });
+    }
+
+    public function someWithTags(): self
+    {
+        return $this->afterCreating(function ($record) {
+            if (rand(0, 100) < 30) {
+                VaultRecordTag::factory()->count(rand(1, 3))->create([
+                    'vault_record_id' => $record->id,
+                ]);
+            }
+        });
     }
 }
