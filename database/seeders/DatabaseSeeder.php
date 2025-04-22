@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             'id' => 1,
             'name' => 'Mini Vault',
             'secret' => env('VITE_CLIENT_SECRET', '4yPJCzknzdoUs3iHSL4DLwSTSziwFWA6SXKrYghd'),
-            'redirect' => config('app.url') . '/auth/callback',
+            'redirect' => config('app.url').'/auth/callback',
             'personal_access_client' => false,
             'password_client' => false,
             'revoked' => false,

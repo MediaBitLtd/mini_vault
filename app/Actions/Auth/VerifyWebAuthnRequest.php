@@ -44,7 +44,7 @@ class VerifyWebAuthnRequest
             ->replace('http://', '')
             ->value();
 
-        if (!in_array($origin, Config::get('auth.webauthn.allowed-origins'))) {
+        if (! in_array($origin, Config::get('auth.webauthn.allowed-origins'))) {
             throw new BadRequestException;
         }
 
@@ -58,10 +58,10 @@ class VerifyWebAuthnRequest
         return [
             'rpIdHash' => base64_encode(substr($data, 0, 32)),
             'flags' => [
-                'userPresent' => !!($flags & 1),
-                'userVerified' => !!($flags & 4),
-                'attestedData' => !!($flags & 64),
-                'extensionsIncluded' => !!($flags & 128),
+                'userPresent' => (bool) ($flags & 1),
+                'userVerified' => (bool) ($flags & 4),
+                'attestedData' => (bool) ($flags & 64),
+                'extensionsIncluded' => (bool) ($flags & 128),
             ],
             'signCount' => strlen($data) > 36
                 ? last(unpack('N', substr($data, 33, 4)))

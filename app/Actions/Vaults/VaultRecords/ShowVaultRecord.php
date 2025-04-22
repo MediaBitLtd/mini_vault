@@ -33,9 +33,9 @@ class ShowVaultRecord
 
     public function jsonResponse(VaultRecord $record): JsonResponse
     {
-       return $this->sendResource(
-           $record,
-           VaultRecordResource::class
-       );
+        return $this->sendResource(
+            $record,
+            VaultRecordResource::class
+        );
     }
 }

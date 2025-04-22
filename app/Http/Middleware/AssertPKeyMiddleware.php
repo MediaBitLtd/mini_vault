@@ -11,7 +11,7 @@ class AssertPKeyMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        throw_if(!blink()->get('pkey'), AuthorizationException::class);
+        throw_if(! blink()->get('pkey'), AuthorizationException::class);
 
         return $next($request);
     }

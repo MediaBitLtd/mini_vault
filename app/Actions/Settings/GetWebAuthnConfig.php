@@ -40,7 +40,7 @@ class GetWebAuthnConfig
                 'name' => $user->fullName,
                 'displayName' => $user->fullName,
             ],
-            'excludeCredentials' => $user->authorizations->map(static fn(Authorization $auth) => [
+            'excludeCredentials' => $user->authorizations->map(static fn (Authorization $auth) => [
                 'id' => $auth->credential_id,
                 'type' => 'public-key',
             ]),

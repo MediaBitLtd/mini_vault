@@ -35,7 +35,6 @@ class VaultRecordValue extends Model
         'value',
     ];
 
-
     protected static function boot()
     {
         parent::boot();
@@ -68,6 +67,7 @@ class VaultRecordValue extends Model
                     $data = $encryptor->decrypt($this->getRawOriginal('value'));
                 } catch (DecryptException) {
                     $this->setAttribute('invalid', true);
+
                     return null;
                 }
 
@@ -75,6 +75,7 @@ class VaultRecordValue extends Model
 
                 if ($uid !== $this->uid) {
                     $this->setAttribute('invalid', true);
+
                     return null;
                 }
 

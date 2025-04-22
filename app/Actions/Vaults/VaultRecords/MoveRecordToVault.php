@@ -15,7 +15,7 @@ class MoveRecordToVault
 
     public function handle(VaultRecord $record, Vault|int $vault): VaultRecord
     {
-        if (!($vault instanceof Vault)) {
+        if (! ($vault instanceof Vault)) {
             $vault = Vault::query()->findOrFail($vault);
         }
 

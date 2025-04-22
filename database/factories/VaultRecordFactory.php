@@ -53,11 +53,10 @@ class VaultRecordFactory extends Factory
                             'secret' => $this->faker->uuid(),
                         ]),
                         default => $this->faker->word(),
-                    }
-                    : null;
+                    } : null;
 
                 $value->name = rand(0, 100) < 30
-                    ? $this->faker->word() . " ({$value->field->slug})"
+                    ? $this->faker->word()." ({$value->field->slug})"
                     : null;
 
                 $value->save();

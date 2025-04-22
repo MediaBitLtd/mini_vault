@@ -7,7 +7,6 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class HandleAuthenticationCallback
 {
@@ -17,7 +16,7 @@ class HandleAuthenticationCallback
     {
         $state = Session::pull('oauth_state');
 
-        if (!(strlen($state) > 0 && $state === $request->get('state'))) {
+        if (! (strlen($state) > 0 && $state === $request->get('state'))) {
             return Inertia::location('/');
         }
 

@@ -37,12 +37,12 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @property-read string $fullName
  */
-class User extends Authenticatable implements HasName, FilamentUser
+class User extends Authenticatable implements FilamentUser, HasName
 {
     use HasApiTokens;
     use HasFactory;
-    use Notifiable;
     use HasRoles;
+    use Notifiable;
 
     protected $fillable = [
         'first_name',
@@ -103,7 +103,7 @@ class User extends Authenticatable implements HasName, FilamentUser
     public function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn() => "$this->first_name $this->last_name",
+            get: fn () => "$this->first_name $this->last_name",
         );
     }
 }
