@@ -25,9 +25,9 @@ class GetVaults
 
     public function jsonResponse(Collection $vaults): JsonResponse
     {
-       return $this->sendResource(
-           $vaults,
-           VaultResource::class
-       );
+        return $this->sendResource(
+            $vaults,
+            VaultResource::class
+        );
     }
 }

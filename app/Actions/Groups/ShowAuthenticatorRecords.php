@@ -19,7 +19,7 @@ class ShowAuthenticatorRecords
             )
             ->with([
                 'vault',
-                'values' => static fn($q) => $q
+                'values' => static fn ($q) => $q
                     ->with('field')
                     ->whereRelation('field', 'type', '=', FieldType::TWO_FA->value)
                     ->orWhereRelation('field', 'slug', '=', 'appname'),

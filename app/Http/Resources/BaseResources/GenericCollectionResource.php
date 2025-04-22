@@ -10,9 +10,6 @@ class GenericCollectionResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param array|mixed $request
-     * @return array
      */
     public function toArray($request): array
     {

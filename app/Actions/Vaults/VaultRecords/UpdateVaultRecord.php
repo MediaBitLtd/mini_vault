@@ -42,7 +42,7 @@ class UpdateVaultRecord
 
     public function handle(Vault $vault, VaultRecord $record, ActionRequest $request): VaultRecord
     {
-        return DB::transaction(function () use($record, $request) : VaultRecord {
+        return DB::transaction(function () use ($record, $request): VaultRecord {
             $input = $request->validated();
             $newVaultId = $input['vault_id'] ?? null;
 

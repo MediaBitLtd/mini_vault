@@ -27,13 +27,14 @@ class GetVaultRecords
     {
         /** @var Vault $vault */
         $vault = $request->route('vault');
+
         return $request->user()->can('view', $vault) && $vault->isUnlockable;
     }
 
     public function handle(Vault $vault, ActionRequest $request): LengthAwarePaginator
     {
         return $vault->records()
-            ->when($request->has('q'), fn($q) => $q
+            ->when($request->has('q'), fn ($q) => $q
                 ->where('name', 'like', "%{$request->get('q')}%")
             )
             ->with(['values.field', 'category'])
@@ -42,9 +43,9 @@ class GetVaultRecords
 
     public function jsonResponse(LengthAwarePaginator $vaults): JsonResponse
     {
-       return $this->sendResource(
-           $vaults,
-           VaultRecordResource::class
-       );
+        return $this->sendResource(
+            $vaults,
+            VaultRecordResource::class
+        );
     }
 }

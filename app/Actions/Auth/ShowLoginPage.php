@@ -20,13 +20,13 @@ class ShowLoginPage
             $queryData = [];
             parse_str($data['query'], $queryData);
 
-            if (!str_starts_with($queryData['redirect_uri'] ?? '', url(''))) {
+            if (! str_starts_with($queryData['redirect_uri'] ?? '', url(''))) {
                 $intendedUrl = request()->session()->get('url.intended');
                 Session::put('oauth_redirect', $intendedUrl);
             }
         }
 
-        if (!Session::has('oauth_state') && !Session::has('oauth_redirect')) {
+        if (! Session::has('oauth_state') && ! Session::has('oauth_redirect')) {
             Session::put('oauth_state', $state = Str::random(40));
 
             $query = http_build_query([
@@ -35,7 +35,7 @@ class ShowLoginPage
                 'response_type' => 'code',
                 'scope' => '*',
                 'state' => $state,
-                'prompt' => 'login'
+                'prompt' => 'login',
             ]);
 
             return redirect(route('passport.authorizations.authorize').'?'.$query);

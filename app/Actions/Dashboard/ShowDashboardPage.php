@@ -30,7 +30,7 @@ class ShowDashboardPage
         /** @var User $user */
         $user = Auth::user();
 
-        if (!$user->onboard) {
+        if (! $user->onboard) {
             return redirect()->route('onboard');
         }
 

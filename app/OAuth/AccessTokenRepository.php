@@ -2,9 +2,9 @@
 
 namespace App\OAuth;
 
+use Laravel\Passport\Bridge\AccessTokenRepository as PassportAccessTokenRepository;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use Laravel\Passport\Bridge\AccessTokenRepository as PassportAccessTokenRepository;
 
 class AccessTokenRepository extends PassportAccessTokenRepository
 {
