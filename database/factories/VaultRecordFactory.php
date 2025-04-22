@@ -22,7 +22,9 @@ class VaultRecordFactory extends Factory
                 DB::table('vault_record_values')->insert([
                     [
                         'vault_record_id' => $record->id,
-                        'field_id' => Field::query()->inRandomOrder()->first()->id,
+                        'field_id' => Field::query()->count() > 10
+                            ? Field::query()->inRandomOrder()->first()->id
+                            : Field::factory()->create()->id,
                         'uid' => $uid = Str::uuid()->toString(),
                         'value' => $encrypter->encrypt([
                             'uid' => $uid,

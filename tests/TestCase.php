@@ -32,6 +32,7 @@ abstract class TestCase extends BaseTestCase
     {
         $request = new ActionRequest($data);
         $request->setValidator(Validator::make($data, $rules));
+
         return $request;
     }
 }
