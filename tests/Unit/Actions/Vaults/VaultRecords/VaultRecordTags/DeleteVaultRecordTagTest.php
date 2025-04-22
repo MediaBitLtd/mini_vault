@@ -23,4 +23,19 @@ class DeleteVaultRecordTagTest extends TestCase
 
         $this->assertDatabaseCount(VaultRecordTag::class, 0);
     }
+
+    public function test_delete_action_with_tag_name()
+    {
+        [$vault] = $this->getVaultAndUser();
+
+        $record = VaultRecord::factory()->for($vault)->create();
+
+        $tag = $record->tags()->create([
+            'name' => 'test',
+        ]);
+
+        DeleteVaultRecordTag::make()->handle($vault, $record, 'test');
+
+        $this->assertDatabaseCount(VaultRecordTag::class, 0);
+    }
 }
