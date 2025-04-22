@@ -56,6 +56,7 @@ class Vault extends Model
     public function getVKey(): string
     {
         $pKey = blink()->get('pkey', '__invalid');
+
         return hash('md5', "$pKey:$this->key");
     }
 
@@ -69,7 +70,7 @@ class Vault extends Model
      */
     public function sign(bool $force = false): void
     {
-        if ($this->signature && !$force) {
+        if ($this->signature && ! $force) {
             throw new VaultAlreadySignedException;
         }
 
@@ -85,7 +86,7 @@ class Vault extends Model
      */
     public function validateVKey(): bool
     {
-        if (!$this->signature) {
+        if (! $this->signature) {
             throw new InvalidVaultSignatureException;
         }
 

@@ -36,7 +36,7 @@ class StoreVault
 
         /** @var Vault $vault */
         $vault = $user->vaults()->create([
-            'name' => $name
+            'name' => $name,
         ]);
 
         $vault->sign();
@@ -68,9 +68,9 @@ class StoreVault
 
     public function jsonResponse(Vault $vault): JsonResponse
     {
-       return $this->sendResource(
-           $vault,
-           VaultResource::class
-       );
+        return $this->sendResource(
+            $vault,
+            VaultResource::class
+        );
     }
 }

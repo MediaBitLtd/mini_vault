@@ -4,7 +4,6 @@ use App\Actions\Auth\ChangePassword;
 use App\Actions\Auth\HandleAuthenticationCallback;
 use App\Actions\Auth\HandleLoginSubmission;
 use App\Actions\Auth\ShowLoginPage;
-use App\Actions\Dashboard\OnboardSubmit;
 use App\Actions\Dashboard\ShowDashboardPage;
 use App\Actions\Dashboard\ShowOnboardPage;
 use App\Actions\Groups\ShowFavourites;
@@ -21,11 +20,13 @@ Route::get('auth/login', ShowLoginPage::class)->name('login');
 Route::post('auth/login', HandleLoginSubmission::class)->name('login.submit');
 Route::get('auth/logout', function () {
     session()->flush();
+
     return redirect()->route('login');
 });
 
 Route::post('auth/verify', function () {
     Auth::guard('web')->login(Auth::guard('api')->user());
+
     return redirect()->route('dashboard');
 })->middleware('auth:api');
 

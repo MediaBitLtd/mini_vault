@@ -24,7 +24,7 @@ class GetBiometricAuthOptionsTest extends TestCase
         $result = GetBiometricAuthOptions::make()->handle(new ActionRequest([
             'userId' => 1000,
             'userKey' => 'test_123',
-            'pKey' => 'test_p_key',
+            'cypher' => encrypt('test_p_key'),
         ]));
 
         $cacheData = Cache::get('webauthn.auth:1000');

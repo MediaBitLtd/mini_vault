@@ -26,6 +26,22 @@
                             <i class="pi py-2" :class="record.is_favourite ? 'pi-star-fill' : 'pi-star'" />
                         </Button>
                         <SpinnerLoader v-else class="m-3 mr-2" />
+                        <Button
+                            :severity="tags.length ? 'help' : 'contrast'"
+                            variant="text"
+                            size="small"
+                            @click="toggleTagsMenu"
+                            aria-haspopup="true"
+                            aria-controls="tags_menu"
+                        >
+                            <i class="pi pi-tags py-2" />
+                        </Button>
+                        <TagsMenu
+                            ref="tagsMenu"
+                            v-model:tags="tags"
+                            :vault
+                            :record
+                        />
 
                         <Button
                             v-if="!editing"
@@ -40,6 +56,7 @@
                             v-else
                             severity="contrast"
                             size="small"
+                            class="ml-3"
                             :disabled="saving"
                             :model="saveMenu"
                             @click="saveRecord"
@@ -118,7 +135,12 @@
 </template>
 <script setup lang="ts">
 import { Dialog, Select, SplitButton, InputText, Button, Card, useConfirm } from 'primevue'
-import { FieldResource, VaultRecordResource, VaultRecordValueResource, VaultResource } from '~/types/resources'
+import {
+    FieldResource,
+    VaultRecordResource,
+    VaultRecordValueResource,
+    VaultResource
+} from '~/types/resources'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import RecordValue from '~/Components/VaultRecords/RecordValue.vue'
 import { MenuItem } from 'primevue/menuitem'
@@ -127,6 +149,7 @@ import SpinnerLoader from '~/Components/SpinnerLoader.vue'
 import { useErrorHandler } from '~/Composables/errors'
 import { useToast } from 'vue-toastification'
 import { useVaults } from '~/Composables/vaults'
+import TagsMenu from '~/Components/VaultRecords/TagsMenu.vue'
 
 const props = defineProps<{
     vault: VaultResource,
@@ -143,6 +166,7 @@ const { vaults } = useVaults()
 
 const page = ref()
 const panel = ref()
+const tagsMenu = ref()
 const opened = ref(false)
 const editing = ref(false)
 const movingRecord = ref(false)
@@ -154,6 +178,7 @@ const addingNewField = ref(false)
 const savingNewField = ref(false)
 const newName = ref<string | undefined>(undefined)
 const newField = ref(props.fields[0]?.id)
+const tags = ref<string[]>(props.record.tags)
 
 const saving = ref(false)
 const savingFavourite = ref(false)
@@ -232,6 +257,10 @@ const toggleOpen = () => {
             autoCloseDebouce.value = false
         }, 1000)
     }
+}
+
+const toggleTagsMenu = (event) => {
+    tagsMenu.value.toggle(event)
 }
 
 const startEditing = () => {

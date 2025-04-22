@@ -15,7 +15,8 @@ class CategoryFactory extends Factory
         return [
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->boolean() ? $this->faker->text() : null,
-            'icon' => 'padlock', // TODO add icons
+            'icon' => 'pi pi-lock',
+            'slug' => $this->faker->slug(),
         ];
     }
 }

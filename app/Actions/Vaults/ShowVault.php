@@ -31,7 +31,7 @@ class ShowVault
 
     public function htmlResponse(Vault $vault): Response|RedirectResponse
     {
-        if (!$vault->isUnlockable) {
+        if (! $vault->isUnlockable) {
             return redirect()->route('dashboard')->with('message', 'Invalid vault');
         }
 

@@ -10,9 +10,6 @@ class PaginatedCollectionResource extends ResourceCollection
 {
     /**
      * Transform the resource into an array.
-     *
-     * @param array|mixed $request
-     * @return array
      */
     public function toArray($request): array
     {
@@ -23,7 +20,7 @@ class PaginatedCollectionResource extends ResourceCollection
                 'per_page' => $this->perPage(),
                 'last_page' => $this->lastPage(),
                 'total' => $this->total(),
-            ]
+            ],
         ];
     }
 }

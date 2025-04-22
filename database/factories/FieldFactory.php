@@ -16,6 +16,7 @@ class FieldFactory extends Factory
         return [
             'label' => $this->faker->text(50),
             'type' => $this->faker->randomElement(FieldType::cases()),
+            'slug' => $this->faker->slug(),
         ];
     }
 }

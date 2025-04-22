@@ -28,7 +28,7 @@ class HandleWebAuthnRegistration
 
         $registerData = Cache::pull("webauthn.register:$user->id");
 
-        if (!$registerData) {
+        if (! $registerData) {
             throw new RuntimeException;
         }
 
@@ -45,7 +45,7 @@ class HandleWebAuthnRegistration
             'counter' => $requestData->authenticatorData->signCount,
         ]);
 
-        if (!$user->biometric_key) {
+        if (! $user->biometric_key) {
             $user->biometric_key = hash('sha256', Str::random(32));
             $user->save();
         }
@@ -58,7 +58,7 @@ class HandleWebAuthnRegistration
         try {
             $user = $this->handle($request);
         } catch (Exception $exception) {
-            Log::debug('Someone tried webauthn and was rejected: ' . $exception->getMessage());
+            Log::debug('Someone tried webauthn and was rejected: '.$exception->getMessage());
             throw new AuthorizationException;
         }
 

@@ -16,10 +16,6 @@ trait Resources
 {
     /**
      * Generates a single resource
-     *
-     * @param JsonSerializable $data
-     * @param string $resource_class
-     * @return JsonResource
      */
     protected function makeSingleResource(
         JsonSerializable $data,
@@ -31,10 +27,6 @@ trait Resources
 
     /**
      * Generates a paginated resource
-     *
-     * @param JsonSerializable $data
-     * @param string $resource_class
-     * @return JsonResource
      */
     protected function makePaginatedResource(
         JsonSerializable $data,
@@ -49,10 +41,6 @@ trait Resources
 
     /**
      * Generates a collection resource
-     *
-     * @param JsonSerializable $data
-     * @param string $resource_class
-     * @return JsonResource
      */
     protected function makeCollectionResource(
         JsonSerializable $data,
@@ -75,25 +63,19 @@ trait Resources
 
     /**
      * Checks that every argument passed in params is numeric
-     *
-     * @param array $params
-     * @return void
      */
     protected function validateRouteParams(int|string ...$params): void
     {
         collect($params)->each(function ($val) {
-            if (!is_numeric($val))
+            if (! is_numeric($val)) {
                 throw new ModelNotFoundException;
+            }
         });
     }
 
     /**
      * Generates a resource based on input and sends as JsonResponse
      * By default **GenericModelResource** will be used
-     *
-     * @param JsonSerializable $data
-     * @param string $resource_class
-     * @return JsonResponse
      */
     public function sendResource(
         JsonSerializable $data,
@@ -121,8 +103,6 @@ trait Resources
 
     /**
      * Sends an empty successful response
-     *
-     * @return JsonResponse
      */
     public function sendSuccessfulResponse(): JsonResponse
     {

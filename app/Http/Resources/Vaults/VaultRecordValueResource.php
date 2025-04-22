@@ -25,7 +25,7 @@ class VaultRecordValueResource extends JsonResource
 
             'value' => $this->when(
                 $this->hasAppended('value') || $includeValues,
-                !is_null($this->value) ? base64_encode($this->value) : null
+                ! is_null($this->value) ? base64_encode($this->value) : null
             ),
             $this->mergeWhen($this->hasAttribute('invalid'), [
                 'invalid' => true,

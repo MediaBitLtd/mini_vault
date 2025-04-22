@@ -23,7 +23,7 @@ class OnboardSetPassword
 
     public function authorized(): bool
     {
-        return Auth::user() && !Auth::user()->onboard;
+        return Auth::user() && ! Auth::user()->onboard;
     }
 
     public function handle(string $password): array

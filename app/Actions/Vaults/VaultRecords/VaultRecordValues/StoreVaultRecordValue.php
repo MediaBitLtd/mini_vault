@@ -42,9 +42,9 @@ class StoreVaultRecordValue
 
     public function jsonResponse(VaultRecordValue $value): JsonResponse
     {
-       return $this->sendResource(
-           $value,
-           VaultRecordValueResource::class
-       );
+        return $this->sendResource(
+            $value,
+            VaultRecordValueResource::class
+        );
     }
 }

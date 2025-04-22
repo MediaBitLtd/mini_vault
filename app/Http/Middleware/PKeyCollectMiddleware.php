@@ -12,7 +12,7 @@ class PKeyCollectMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $header = $request->header('Authorization');
-        if (!$header || !str_contains($header, 'Bearer')) {
+        if (! $header || ! str_contains($header, 'Bearer')) {
             return $next($request);
         }
 

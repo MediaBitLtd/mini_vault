@@ -35,7 +35,7 @@ class StoreVaultRecord
 
     public function handle(Vault $vault, ActionRequest $request): VaultRecord
     {
-        return DB::transaction(fn(): VaultRecord => $vault
+        return DB::transaction(fn (): VaultRecord => $vault
             ->records()
             ->create($request->validated())
             ->refresh()
@@ -45,9 +45,9 @@ class StoreVaultRecord
 
     public function jsonResponse(VaultRecord $record): JsonResponse
     {
-       return $this->sendResource(
-           $record,
-           VaultRecordResource::class
-       );
+        return $this->sendResource(
+            $record,
+            VaultRecordResource::class
+        );
     }
 }

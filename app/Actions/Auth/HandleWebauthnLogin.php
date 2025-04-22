@@ -5,7 +5,6 @@ namespace App\Actions\Auth;
 use App\Models\Authorization;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -35,7 +34,7 @@ class HandleWebauthnLogin
 
         $isValidSignature = $this->verifySignature($authorization->public_key, $request->get('response'));
 
-        if (!$isValidSignature) {
+        if (! $isValidSignature) {
             throw new AuthorizationException;
         }
 

@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Vault;
-use Illuminate\Auth\Access\Response;
 
 class VaultPolicy
 {
