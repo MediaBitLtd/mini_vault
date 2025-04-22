@@ -3,7 +3,7 @@ name: PHP Tests
 on: [pull_request]
 
 jobs:
-  phplint:
+  phptests:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
