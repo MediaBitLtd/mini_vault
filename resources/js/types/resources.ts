@@ -64,6 +64,12 @@ export interface VaultRecordResource extends ModelResource {
     is_favourite: boolean;
     category: CategoryResource;
     values: VaultRecordValueResource[];
+    tags: string[];
+}
+
+export interface VaultRecordTag extends ModelResource {
+    name: string;
+    loading?: boolean;
 }
 
 export interface VaultRecordValueResource extends ModelResource {

@@ -25,6 +25,7 @@ use Illuminate\Support\Str;
  * @property Vault $vault
  * @property Category $category
  * @property VaultRecordValue[]|Collection $values
+ * @property VaultRecordTag[]|Collection $tags
  */
 class VaultRecord extends Model
 {
@@ -74,5 +75,10 @@ class VaultRecord extends Model
     public function values(): HasMany
     {
         return $this->hasMany(VaultRecordValue::class);
+    }
+
+    public function tags(): HasMany
+    {
+        return $this->hasMany(VaultRecordTag::class);
     }
 }

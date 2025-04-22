@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Category;
 use App\Models\Field;
 use App\Models\VaultRecord;
+use App\Models\VaultRecordTag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -60,6 +61,12 @@ class VaultRecordFactory extends Factory
                     : null;
 
                 $value->save();
+            }
+
+            if (rand(0, 100) < 30) {
+                VaultRecordTag::factory()->count(rand(1, 3))->create([
+                    'vault_record_id' => $record->id,
+                ]);
             }
         });
     }

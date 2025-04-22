@@ -21,6 +21,8 @@ use App\Actions\Vaults\VaultRecords\GetVaultRecords;
 use App\Actions\Vaults\VaultRecords\ShowVaultRecord;
 use App\Actions\Vaults\VaultRecords\StoreVaultRecord;
 use App\Actions\Vaults\VaultRecords\UpdateVaultRecord;
+use App\Actions\Vaults\VaultRecords\VaultRecordTags\DeleteVaultRecordTag;
+use App\Actions\Vaults\VaultRecords\VaultRecordTags\StoreVaultRecordTag;
 use App\Actions\Vaults\VaultRecords\VaultRecordValues\ShowVaultRecordValue;
 use App\Actions\Vaults\VaultRecords\VaultRecordValues\StoreVaultRecordValue;
 use App\Actions\Vaults\VaultRecords\VaultRecordValues\UpdateVaultRecordValue;
@@ -67,11 +69,18 @@ Route::middleware('auth:api')->group(function () {
                     Route::put('{record}', UpdateVaultRecord::class)->name('update');
                     Route::delete('{record}', DeleteVaultRecord::class)->name('delete');
 
-                    Route::post('{record}/values', StoreVaultRecordValue::class)->name('values.store');
+                    Route::prefix('{record}/values')->as('values.')->group(function () {
+                        Route::post('', StoreVaultRecordValue::class)->name('store');
 
-                    Route::get('{record}/values/{value}', ShowVaultRecordValue::class)->name('values.show');
-                    Route::put('{record}/values/{value}', UpdateVaultRecordValue::class)->name('values.update');
-                    Route::delete('{record}/values/{value}', StoreVaultRecordValue::class)->name('values.destroy');
+                        Route::get('{value}', ShowVaultRecordValue::class)->name('show');
+                        Route::put('{value}', UpdateVaultRecordValue::class)->name('update');
+                        Route::delete('{value}', StoreVaultRecordValue::class)->name('destroy');
+                    });
+
+                    Route::prefix('{record}/tags')->as('tags.')->group(function () {
+                        Route::post('', StoreVaultRecordTag::class)->name('store');
+                        Route::delete('{tag}', DeleteVaultRecordTag::class)->name('destroy');
+                    });
                 });
             });
         });

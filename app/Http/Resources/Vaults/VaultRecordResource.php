@@ -22,6 +22,8 @@ class VaultRecordResource extends JsonResource
 
             'vault' => VaultResource::make($this->whenLoaded('vault')),
 
+            'tags' => $this->tags->map(static fn ($tag) => $tag->name),
+
             'created_at' => datetime($this->created_at),
             'updated_at' => datetime($this->updated_at),
         ];
