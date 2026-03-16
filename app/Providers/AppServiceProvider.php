@@ -16,6 +16,8 @@ class AppServiceProvider extends ServiceProvider
     {
         App::bind(PassportAccessTokenRepository::class, AccessTokenRepository::class);
         Passport::useClientModel(Client::class);
+
+        Passport::authorizationView('vendor.passport.authorize');
     }
 
     public function boot(): void
