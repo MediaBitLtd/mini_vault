@@ -1,6 +1,6 @@
 import CookieJS from 'js-cookie'
 import axios from 'axios'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { usePage, router } from '@inertiajs/vue3'
 import { UserResource } from '~/types/resources'
 import { useEncryption } from '~/Composables/encryption'
@@ -63,11 +63,15 @@ const attemptAuthWithCredential = async (credential) => {
         const accessToken = data.access_token
         CookieJS.set('_accessToken', accessToken) // Session cookie
         axios.defaults.headers.Authorization = `Bearer ${ accessToken }`
-        router.post('/auth/verify', {}, {
+
+        await axios.post('/auth/verify', {}, {
+            baseURL: '/',
             headers: {
                 Authorization: `Bearer ${ accessToken }`,
             },
         })
+
+        router.get('/')
     } catch (e) {
         toast.error('Something went wrong authenticating with authn');
         console.error(e)

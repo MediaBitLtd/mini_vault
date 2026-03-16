@@ -15,7 +15,6 @@ use App\Http\Middleware\RedirectAdminsMiddleware;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('auth/login', ShowLoginPage::class)->name('login');
 Route::post('auth/login', HandleLoginSubmission::class)->name('login.submit');
@@ -28,7 +27,7 @@ Route::get('auth/logout', function () {
 Route::post('auth/verify', function () {
     Auth::guard('web')->login(Auth::guard('api')->user());
 
-    return Inertia::location(route('dashboard'));
+    return response()->noContent();
 })->middleware('auth:api');
 
 Route::post('auth/change-password', ChangePassword::class)
