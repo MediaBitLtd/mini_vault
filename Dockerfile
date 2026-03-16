@@ -12,7 +12,8 @@ RUN apt update && apt install -y \
   libzip-dev \
   libxml2-dev \
   libmcrypt-dev \
-  libonig-dev
+  libonig-dev \
+  libicu-dev
 
 RUN pecl install -o -f redis
 RUN docker-php-ext-enable redis
