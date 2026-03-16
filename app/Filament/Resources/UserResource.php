@@ -4,9 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use BackedEnum;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -14,11 +16,11 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?int $navigationSort = 0;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
             ->schema([
@@ -42,13 +44,13 @@ class UserResource extends Resource
                     ->label('Password')
                     ->required()
                     ->password()
-                    ->hidden(static fn (Forms\Get $get) => $get('id') !== auth()->id()),
+                    ->hidden(static fn (Get $get) => $get('id') !== auth()->id()),
                 Forms\Components\TextInput::make('password_confirmation')
                     ->label('Confirm password')
                     ->required()
                     ->password()
                     ->same('password')
-                    ->hidden(static fn (Forms\Get $get) => $get('id') !== auth()->id()),
+                    ->hidden(static fn (Get $get) => $get('id') !== auth()->id()),
             ]);
     }
 
@@ -60,7 +62,7 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('last_name'),
                 Tables\Columns\TextColumn::make('email'),
             ])
-            ->actions([
+            ->recordActions([
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
