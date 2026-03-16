@@ -18,6 +18,8 @@ class OAuthClientResource extends Resource
 
     protected static ?string $label = 'OAuth Clients';
 
+    protected static ?string $slug = 'oauth_clients';
+
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-key';
 
     protected static ?int $navigationSort = 1;
@@ -32,11 +34,11 @@ class OAuthClientResource extends Resource
                     ->required(),
                 Forms\Components\Select::make('revoked')
                     ->options([true => 'Yes', false => 'No'])
-                    ->default(false),
+                    ->required(),
                 Forms\Components\Select::make('requires_user_key')
                     ->label('Has access to vaults')
                     ->options([true => 'Yes', false => 'No'])
-                    ->default(false),
+                    ->required(),
                 Forms\Components\TextInput::make('secret')
                     ->readOnly()
                     ->visible('edit'),
@@ -61,7 +63,7 @@ class OAuthClientResource extends Resource
             ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),

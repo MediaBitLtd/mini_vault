@@ -12,6 +12,7 @@ class CreateOAuthClient extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        $data['id'] = Str::uuid()->toString();
         $data['personal_access_client'] = $data['personal_access_client'] ?? 0;
         $data['password_client'] = $data['password_client'] ?? 0;
 
