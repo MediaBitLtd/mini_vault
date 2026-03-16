@@ -36,9 +36,9 @@ class DatabaseSeeder extends Seeder
         }
 
         Client::factory()->create([
-            'id' => 1,
+            'id' => Str::uuid()->toString(),
             'name' => 'Mini Vault',
-            'secret' => env('VITE_CLIENT_SECRET', '4yPJCzknzdoUs3iHSL4DLwSTSziwFWA6SXKrYghd'),
+            'secret' => Hash::make(env('VITE_CLIENT_SECRET', '4yPJCzknzdoUs3iHSL4DLwSTSziwFWA6SXKrYghd')),
             'redirect' => config('app.url').'/auth/callback',
             'personal_access_client' => false,
             'password_client' => false,
@@ -47,9 +47,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Client::factory()->create([
-            'id' => 2,
+            'id' => Str::uuid()->toString(),
             'name' => 'Mini Vault PAC',
-            'secret' => Str::random(40),
+            'secret' => Hash::make(Str::random(40)),
             'redirect' => 'http://localhost',
             'personal_access_client' => true,
             'password_client' => false,
