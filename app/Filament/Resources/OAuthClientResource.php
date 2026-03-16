@@ -41,7 +41,6 @@ class OAuthClientResource extends Resource
                     ->default(false),
                 Forms\Components\TextInput::make('secret')
                     ->readOnly()
-                    ->mutateDehydratedState()
                     ->visibleOn('edit'),
             ]);
     }
