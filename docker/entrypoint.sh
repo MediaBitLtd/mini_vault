@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-composer install
+composer install --no-dev
 
 if [ ! -e /var/www/data/database.sqlite ]; then
     touch /var/www/data/database.sqlite

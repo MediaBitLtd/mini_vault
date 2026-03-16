@@ -2,6 +2,7 @@
 
 namespace App\Actions\Auth;
 
+use App\OAuth\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -30,7 +31,10 @@ class ShowLoginPage
             Session::put('oauth_state', $state = Str::random(40));
 
             $query = http_build_query([
-                'client_id' => 1,
+                'client_id' => Client::query()
+                    ->where('redirect', '=', config('app.url').'/auth/callback')
+                    ->firstOrFail()
+                    ->id,
                 'redirect_uri' => route('auth.callback'),
                 'response_type' => 'code',
                 'scope' => '*',
