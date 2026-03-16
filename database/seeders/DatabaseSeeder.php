@@ -7,7 +7,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Passport\Client;
-use Laravel\Passport\PersonalAccessClient;
 
 class DatabaseSeeder extends Seeder
 {
@@ -58,8 +57,5 @@ class DatabaseSeeder extends Seeder
             'requires_user_key' => true,
         ]);
 
-        PersonalAccessClient::query()->create([
-            'client_id' => 2,
-        ]);
     }
 }

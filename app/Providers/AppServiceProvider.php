@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Bridge\AccessTokenRepository as PassportAccessTokenRepository;
+use Laravel\Passport\Contracts\AuthorizationViewResponse;
 use Laravel\Passport\Passport;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,6 +17,8 @@ class AppServiceProvider extends ServiceProvider
     {
         App::bind(PassportAccessTokenRepository::class, AccessTokenRepository::class);
         Passport::useClientModel(Client::class);
+
+        Passport::authorizationView('vendor.passport.authorize');
     }
 
     public function boot(): void

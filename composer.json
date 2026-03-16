@@ -10,7 +10,7 @@
         "filament/filament": "^3.3",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
-        "laravel/passport": "^12.4",
+        "laravel/passport": "^13.0",
         "laravel/tinker": "^2.9",
         "lorisleiva/laravel-actions": "^2.8",
         "predis/predis": "^2.0",
