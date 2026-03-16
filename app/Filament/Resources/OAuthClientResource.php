@@ -34,14 +34,15 @@ class OAuthClientResource extends Resource
                     ->required(),
                 Forms\Components\Select::make('revoked')
                     ->options([true => 'Yes', false => 'No'])
-                    ->required(),
+                    ->default(false),
                 Forms\Components\Select::make('requires_user_key')
                     ->label('Has access to vaults')
                     ->options([true => 'Yes', false => 'No'])
-                    ->required(),
+                    ->default(false),
                 Forms\Components\TextInput::make('secret')
                     ->readOnly()
-                    ->visible('edit'),
+                    ->mutateDehydratedState()
+                    ->visibleOn('edit'),
             ]);
     }
 
