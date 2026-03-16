@@ -3,12 +3,15 @@
 namespace App\Filament\Resources\OAuthClientResource\Pages;
 
 use App\Filament\Resources\OAuthClientResource;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Str;
 
 class CreateOAuthClient extends CreateRecord
 {
     protected static string $resource = OAuthClientResource::class;
+
+    protected ?string $plaintextSecret = null;
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
@@ -18,8 +21,19 @@ class CreateOAuthClient extends CreateRecord
         $data['revoked'] = $data['revoked'] ?? 0;
         $data['requires_user_key'] = $data['requires_user_key'] ?? 0;
 
-        $data['secret'] = Str::random(40);
+        $this->plaintextSecret = Str::random(40);
+        $data['secret'] = $this->plaintextSecret;
 
         return $data;
+    }
+
+    protected function afterCreate(): void
+    {
+        Notification::make()
+            ->title('Client secret')
+            ->body("Copy this secret now — it won't be shown again: {$this->plaintextSecret}")
+            ->persistent()
+            ->success()
+            ->send();
     }
 }

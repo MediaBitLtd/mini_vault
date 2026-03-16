@@ -39,9 +39,6 @@ class OAuthClientResource extends Resource
                     ->label('Has access to vaults')
                     ->options([true => 'Yes', false => 'No'])
                     ->default(false),
-                Forms\Components\TextInput::make('secret')
-                    ->readOnly()
-                    ->visibleOn('edit'),
             ]);
     }
 
