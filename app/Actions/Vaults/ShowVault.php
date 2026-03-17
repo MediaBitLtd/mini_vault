@@ -31,10 +31,6 @@ class ShowVault
 
     public function htmlResponse(Vault $vault): Response|RedirectResponse
     {
-        if (! $vault->isUnlockable) {
-            return redirect()->route('dashboard')->with('message', 'Invalid vault');
-        }
-
         $categories = Category::all();
         $fields = Field::all();
 
